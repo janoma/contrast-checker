@@ -373,10 +373,10 @@ export default function App() {
   }, [permalink]);
 
   return (
-    <div className="max-w-4xl mx-auto border rounded-lg p-6 my-8 bg-gray-50 space-y-8">
+    <div className="prose max-w-4xl mx-auto border rounded-lg p-6 my-8 bg-gray-50 space-y-8">
       <header>
-        <h1 className="font-heading text-3xl font-bold">Contrast Checker</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1>Contrast Checker</h1>
+        <p>
           WCAG 2.x contrast ratio calculator for foreground and background
           colors.
         </p>
@@ -406,12 +406,10 @@ export default function App() {
       {/* Contrast ratio */}
       <div className="flex flex-col items-center gap-2">
         <div className="border rounded-xl px-12 py-5 text-center bg-white shadow-sm">
-          <p className="text-sm text-gray-500 mb-1 font-medium">
-            Contrast Ratio
-          </p>
+          <p>Contrast Ratio</p>
           <p className="text-6xl font-bold tracking-tight leading-none">
             {contrastRatio.toFixed(2)}
-            <span className="text-3xl font-normal text-gray-400">:1</span>
+            <span className="font-normal">:1</span>
           </p>
         </div>
         <button
