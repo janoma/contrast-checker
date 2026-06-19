@@ -1,6 +1,7 @@
 import { colorToCss, compositeAlpha } from "@/lib/color-utils";
 import { readUrlParams } from "@/lib/url-params";
 import { type ColorInstance } from "color";
+import { ExternalLink } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ColorPanel } from "./components/ColorPanel";
 import { PreviewSection } from "./components/PreviewSection";
@@ -140,34 +141,21 @@ export default function App() {
         }
       />
 
-      <section className="text-sm text-gray-600 bg-white border rounded-lg p-4 space-y-2">
-        <h2 className="font-semibold text-gray-800 text-base">Explanation</h2>
+      <footer className="text-sm text-muted-foreground bg-muted border rounded-lg p-4 mt-16">
         <p>
-          Enter a color in any supported format. The input is parsed
-          automatically. Use the sRGB Picker as a convenient starting point,
-          then refine with the text input. The Lightness slider adjusts HSL
-          lightness. "Color formats" shows the current color in all formats,
-          each with a copy button.
+          Based on the{" "}
+          <a
+            className="border-b-2 border-double border-muted-foreground hover:border-primary inline-flex gap-1.5 items-center"
+            href="https://webaim.org/resources/contrastchecker/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Contrast Checker
+            <ExternalLink size={12} />
+          </a>{" "}
+          by WebAIM, with added support for more color formats.
         </p>
-        <ul className="list-disc list-inside space-y-1 mt-1">
-          <li>
-            <strong>WCAG AA</strong> — ≥ 4.5:1 for normal text, ≥ 3:1 for large
-            text and graphics.
-          </li>
-          <li>
-            <strong>WCAG AAA</strong> — ≥ 7:1 for normal text, ≥ 4.5:1 for large
-            text.
-          </li>
-          <li>
-            Large text: 18 pt (24 px) or larger, or 14 pt bold (≈ 18.67 px) or
-            larger.
-          </li>
-          <li>
-            OKLCH / OKLAB colors outside the sRGB gamut are clamped. WCAG
-            contrast is always computed on the sRGB-clamped version.
-          </li>
-        </ul>
-      </section>
+      </footer>
     </div>
   );
 }
