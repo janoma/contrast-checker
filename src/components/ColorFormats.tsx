@@ -1,9 +1,4 @@
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
   formatHex,
   formatHsl,
   formatHwb,
@@ -69,18 +64,23 @@ export function ColorFormats({ color }: { color: ColorInstance }) {
   );
 
   return (
-    <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger className="w-full rounded flex items-center justify-center gap-1 text-sm text-muted-foreground py-1 cursor-pointer">
+    <div>
+      <button
+        onClick={() => {
+          setOpen((o) => !o);
+        }}
+        className="w-full rounded flex items-center justify-center gap-1 text-sm text-muted-foreground py-1 cursor-pointer"
+      >
         <span>Color formats</span>
         <span className="select-none">{open ? "▴" : "▾"}</span>
-      </CollapsibleTrigger>
-      <CollapsibleContent>
+      </button>
+      {open && (
         <div className="mt-2 border rounded-md bg-gray-50 px-2 pb-1 pt-0.5">
           {formats.map((f) => (
             <FormatRow key={f.label} label={f.label} value={f.value} />
           ))}
         </div>
-      </CollapsibleContent>
-    </Collapsible>
+      )}
+    </div>
   );
 }

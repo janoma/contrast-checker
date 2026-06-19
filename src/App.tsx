@@ -1,9 +1,8 @@
 import { colorToCss, compositeAlpha } from "@/lib/color-utils";
 import { readUrlParams } from "@/lib/url-params";
 import { type ColorInstance } from "color";
-import { Copy, ExternalLink } from "lucide-react";
+import { Check, Copy, ExternalLink } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
 import { ColorPanel } from "./components/ColorPanel";
 import { PreviewSection } from "./components/PreviewSection";
 import { cn } from "./lib/utils";
@@ -46,11 +45,16 @@ export default function App() {
   const largeAAA = contrastRatio >= 4.5;
   const graphicsAA = contrastRatio >= 3;
 
+  const [permalinkCopied, setPermalinkCopied] = useState(false);
+
   const permalink = `${window.location.origin}${window.location.pathname}?fcolor=${fgColor.hex().slice(1)}&bcolor=${bgColor.hex().slice(1)}&alpha=${fgColor.alpha().toFixed(2)}`;
 
   const copyPermalink = useCallback(() => {
     void navigator.clipboard.writeText(permalink);
-    toast.success("Permalink copied to clipboard");
+    setPermalinkCopied(true);
+    setTimeout(() => {
+      setPermalinkCopied(false);
+    }, 1800);
   }, [permalink]);
 
   return (
@@ -91,8 +95,17 @@ export default function App() {
             "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent place-self-center",
           )}
         >
-          permalink
-          <Copy size={12} />
+          {permalinkCopied ? (
+            <>
+              copied!
+              <Check size={12} className="text-green-600" />
+            </>
+          ) : (
+            <>
+              permalink
+              <Copy size={12} />
+            </>
+          )}
         </button>
       </div>
 

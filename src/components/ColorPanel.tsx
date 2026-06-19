@@ -1,7 +1,6 @@
 import { Slider } from "@/components/ui/slider";
 import { parseColorInput } from "@/lib/color-parser";
 import { lightnessGradientFromColor } from "@/lib/color-utils";
-import { cn } from "@/lib/utils";
 import Color, { type ColorInstance } from "color";
 import { useCallback, useState } from "react";
 import { ColorFormats } from "./ColorFormats";
@@ -175,18 +174,6 @@ export function ColorPanel({
                 typeof value === "number" ? value : value[0],
               );
             }}
-            className={cn(
-              "relative z-10",
-              "**:data-[slot=slider-track]:bg-transparent",
-              "**:data-[slot=slider-track]:h-8",
-              "**:data-[slot=slider-range]:bg-transparent",
-              "**:data-[slot=slider-thumb]:size-5",
-              "**:data-[slot=slider-thumb]:bg-white",
-              "**:data-[slot=slider-thumb]:border-2",
-              "**:data-[slot=slider-thumb]:border-muted-foreground",
-              "**:data-[slot=slider-thumb]:shadow-md",
-              "**:data-[slot=slider-thumb]:rounded-sm",
-            )}
           />
         </div>
       </div>
