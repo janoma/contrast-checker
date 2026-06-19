@@ -3,9 +3,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { type ColorInstance } from "color";
-import { Check, Copy } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
 import {
   formatHex,
   formatHsl,
@@ -16,6 +13,9 @@ import {
   formatOklch,
   formatRgb,
 } from "@/lib/color-format";
+import { type ColorInstance } from "color";
+import { Check, Copy } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
 
 function FormatRow({ label, value }: { label: string; value: string }) {
   const [copied, setCopied] = useState(false);
@@ -29,11 +29,11 @@ function FormatRow({ label, value }: { label: string; value: string }) {
   }, [value]);
 
   return (
-    <div className="flex items-center gap-2 py-1.5 border-b border-gray-100 last:border-b-0">
-      <span className="text-xs font-semibold text-gray-400 w-14 shrink-0 uppercase tracking-wide">
+    <div className="flex items-center gap-2 py-1.5 border-b last:border-b-0">
+      <span className="text-sm font-light text-muted-foreground w-14 shrink-0 uppercase tracking-wide">
         {label}
       </span>
-      <span className="flex-1 font-mono text-xs text-gray-800 break-all leading-relaxed">
+      <span className="flex-1 font-mono text-sm text-foreground break-all leading-relaxed">
         {value}
       </span>
       <button
@@ -70,7 +70,7 @@ export function ColorFormats({ color }: { color: ColorInstance }) {
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger className="w-full flex items-center justify-center gap-1 text-xs text-gray-400 hover:text-gray-600 py-1 transition-colors cursor-pointer">
+      <CollapsibleTrigger className="w-full rounded flex items-center justify-center gap-1 text-sm text-muted-foreground py-1 cursor-pointer">
         <span>Color formats</span>
         <span className="select-none">{open ? "▴" : "▾"}</span>
       </CollapsibleTrigger>

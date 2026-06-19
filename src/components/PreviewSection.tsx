@@ -20,8 +20,8 @@ export function PreviewSection({
       <h2 className="font-heading text-xl font-bold text-red-700 border-b border-red-200 pb-1">
         {heading}
       </h2>
-      <div className="flex items-stretch gap-6">
-        <div className="space-y-2 w-36 shrink-0 flex flex-col justify-center">
+      <div className="flex flex-col sm:flex-row items-stretch gap-3 sm:gap-6">
+        <div className="space-y-2 shrink-0 flex flex-col justify-center">
           {wcagRows.map((r) => (
             <WcagRow key={r.label} label={r.label} pass={r.pass} />
           ))}

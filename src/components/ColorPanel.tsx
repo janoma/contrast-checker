@@ -1,6 +1,7 @@
 import { Slider } from "@/components/ui/slider";
 import { parseColorInput } from "@/lib/color-parser";
 import { lightnessGradientFromColor } from "@/lib/color-utils";
+import { cn } from "@/lib/utils";
 import Color, { type ColorInstance } from "color";
 import { useCallback, useState } from "react";
 import { ColorFormats } from "./ColorFormats";
@@ -81,14 +82,13 @@ export function ColorPanel({
       </h2>
 
       <div>
-        <p className="text-xs text-muted-foreground text-center mb-1">
+        <p className="text-sm text-muted-foreground text-center mb-1">
           Color Value
         </p>
         <input
-          className="w-full border rounded px-2 py-1.5 text-sm font-mono outline-none focus:ring-1 focus:ring-blue-300"
+          className="w-full border rounded px-2 py-1.5 text-sm font-mono"
           value={displayInput}
           spellCheck={false}
-          placeholder="#RRGGBB · rgb() · oklch() · …"
           onFocus={(e) => {
             e.target.select();
           }}
@@ -105,7 +105,7 @@ export function ColorPanel({
       </div>
 
       {outOfGamut && (
-        <div className="flex items-start gap-1.5 bg-amber-50 border border-amber-200 rounded p-2 text-xs text-amber-800 leading-snug">
+        <div className="flex items-start gap-1.5 bg-amber-50 border border-amber-200 rounded p-2 text-sm text-amber-800 leading-snug">
           <span className="shrink-0 mt-px">⚠</span>
           <span>
             This color is outside sRGB. The closest sRGB approximation is shown.
@@ -116,7 +116,7 @@ export function ColorPanel({
 
       <div className="flex gap-3 items-end">
         <div className="flex-1">
-          <p className="text-xs text-muted-foreground text-center mb-1">
+          <p className="text-sm text-muted-foreground text-center mb-1">
             Color Picker
           </p>
           <input
@@ -131,11 +131,11 @@ export function ColorPanel({
         </div>
         {showAlpha && (
           <div className="w-16">
-            <p className="text-xs text-muted-foreground text-center mb-1">
+            <p className="text-sm text-muted-foreground text-center mb-1">
               Alpha
             </p>
             <input
-              className="w-full border rounded px-2 py-1.5 text-sm text-center focus:outline-none focus:ring-1 focus:ring-blue-300"
+              className="w-full h-10 border rounded px-2 py-1.5 text-sm text-center"
               value={displayAlpha}
               onChange={(e) => {
                 setRawAlpha(e.target.value);
@@ -152,7 +152,7 @@ export function ColorPanel({
       </div>
 
       <div>
-        <p className="text-xs text-muted-foreground text-center mb-2">
+        <p className="text-sm text-muted-foreground text-center mb-2">
           Lightness
         </p>
         <div className="relative">
@@ -175,7 +175,7 @@ export function ColorPanel({
                 typeof value === "number" ? value : value[0],
               );
             }}
-            className={[
+            className={cn(
               "relative z-10",
               "**:data-[slot=slider-track]:bg-transparent",
               "**:data-[slot=slider-track]:h-8",
@@ -186,7 +186,7 @@ export function ColorPanel({
               "**:data-[slot=slider-thumb]:border-muted-foreground",
               "**:data-[slot=slider-thumb]:shadow-md",
               "**:data-[slot=slider-thumb]:rounded-sm",
-            ].join(" ")}
+            )}
           />
         </div>
       </div>

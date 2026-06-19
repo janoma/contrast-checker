@@ -1,10 +1,12 @@
 import { colorToCss, compositeAlpha } from "@/lib/color-utils";
 import { readUrlParams } from "@/lib/url-params";
 import { type ColorInstance } from "color";
-import { ExternalLink } from "lucide-react";
+import { Copy, ExternalLink } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { ColorPanel } from "./components/ColorPanel";
 import { PreviewSection } from "./components/PreviewSection";
+import { cn } from "./lib/utils";
 
 const SAMPLE_TEXT =
   "I will not say 'do not weep,' for not all tears are an evil.";
@@ -48,19 +50,20 @@ export default function App() {
 
   const copyPermalink = useCallback(() => {
     void navigator.clipboard.writeText(permalink);
+    toast.success("Permalink copied to clipboard");
   }, [permalink]);
 
   return (
-    <div className="max-w-4xl mx-auto border rounded-lg p-6 my-8 bg-gray-50 space-y-8">
+    <div className="lg:max-w-[calc(var(--container-5xl)-4rem)] lg:mx-auto lg:border lg:rounded-lg p-3 sm:p-6 lg:my-8 bg-gray-50 space-y-8">
       <header>
         <h1 className="font-heading text-3xl font-bold">Contrast Checker</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          WCAG 2.x contrast ratio calculator. Accepts HEX, RGB, HSL, HWB, OKLCH,
-          OKLAB, LCH, and LAB color formats.
+          WCAG 2.0 and 2.1 contrast ratio calculator. Accepts HEX, RGB, HSL,
+          HWB, OKLCH, OKLAB, LCH, and LAB color formats.
         </p>
       </header>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-sm mx-auto sm:max-w-none">
         <ColorPanel
           title="Foreground"
           color={fgColor}
@@ -70,8 +73,8 @@ export default function App() {
         <ColorPanel title="Background" color={bgColor} onChange={setBgColor} />
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <div className="border rounded-xl px-12 py-5 text-center bg-white shadow-sm">
+      <div className="flex flex-col items-stretch sm:items-center gap-2 max-w-sm mx-auto sm:max-w-none">
+        <div className="border rounded-xl px-12 py-5 text-center bg-background">
           <p className="text-sm text-muted-foreground mb-1 font-medium">
             Contrast Ratio
           </p>
@@ -82,9 +85,14 @@ export default function App() {
         </div>
         <button
           onClick={copyPermalink}
-          className="text-sm text-blue-600 hover:underline cursor-pointer bg-transparent border-none p-0"
+          className={cn(
+            "text-sm text-primary-foreground cursor-pointer bg-transparent p-0 inline-flex gap-1.5 items-center",
+            "border-b-2 border-double border-primary-foreground",
+            "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent place-self-center",
+          )}
         >
           permalink
+          <Copy size={12} />
         </button>
       </div>
 
@@ -134,7 +142,7 @@ export default function App() {
             <input
               type="text"
               defaultValue="Text Input"
-              className="rounded px-3 py-1.5 text-sm bg-white text-gray-900"
+              className="rounded px-3 py-1.5 text-sm bg-background text-foreground"
               style={{ border: `2px solid ${fgCss}` }}
             />
           </div>
@@ -145,7 +153,11 @@ export default function App() {
         <p>
           Based on the{" "}
           <a
-            className="border-b-2 border-double border-muted-foreground hover:border-primary inline-flex gap-1.5 items-center"
+            className={cn(
+              "border-b-2 border-double border-primary-foreground text-primary-foreground",
+              "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent",
+              "inline-flex gap-1.5 items-center",
+            )}
             href="https://webaim.org/resources/contrastchecker/"
             target="_blank"
             rel="noopener noreferrer"
