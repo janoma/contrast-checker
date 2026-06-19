@@ -10,9 +10,6 @@ importers:
       "@base-ui/react":
         specifier: ^1.6.0
         version: 1.6.0(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      "@fontsource-variable/noto-sans":
-        specifier: ^5.2.10
-        version: 5.2.10
       "@fontsource-variable/playfair-display":
         specifier: ^5.2.8
         version: 5.2.8
@@ -472,12 +469,6 @@ packages:
     resolution:
       {
         integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==,
-      }
-
-  "@fontsource-variable/noto-sans@5.2.10":
-    resolution:
-      {
-        integrity: sha512-wyFgKkFu7jki5kEL8qv7avjQ8rxHX0J/nhLWvbR9T0hOH1HRKZEvb9EW9lMjZfWHHfEzKkYf5J+NadwgCS7TXA==,
       }
 
   "@fontsource-variable/playfair-display@5.2.8":
@@ -4000,8 +3991,6 @@ snapshots:
       react-dom: 19.2.7(react@19.2.7)
 
   "@floating-ui/utils@0.2.11": {}
-
-  "@fontsource-variable/noto-sans@5.2.10": {}
 
   "@fontsource-variable/playfair-display@5.2.8": {}
 
