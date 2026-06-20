@@ -7,10 +7,17 @@ import { loadedFormatters, loadedLocales, locales } from "./i18n-util.js";
 
 const localeTranslationLoaders = {
   ar: () => import("./ar/index.js"),
+  de: () => import("./de/index.js"),
   en: () => import("./en/index.js"),
   "en-GB": () => import("./en-GB/index.js"),
   es: () => import("./es/index.js"),
+  fr: () => import("./fr/index.js"),
   it: () => import("./it/index.js"),
+  ja: () => import("./ja/index.js"),
+  nl: () => import("./nl/index.js"),
+  pt: () => import("./pt/index.js"),
+  "pt-BR": () => import("./pt-BR/index.js"),
+  zh: () => import("./zh/index.js"),
 };
 
 const updateDictionary = (

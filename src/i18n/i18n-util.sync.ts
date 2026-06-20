@@ -6,17 +6,31 @@ import type { Locales, Translations } from "./i18n-types.js";
 import { loadedFormatters, loadedLocales, locales } from "./i18n-util.js";
 
 import ar from "./ar/index.js";
+import de from "./de/index.js";
 import en from "./en/index.js";
 import en_GB from "./en-GB/index.js";
 import es from "./es/index.js";
+import fr from "./fr/index.js";
 import it from "./it/index.js";
+import ja from "./ja/index.js";
+import nl from "./nl/index.js";
+import pt from "./pt/index.js";
+import pt_BR from "./pt-BR/index.js";
+import zh from "./zh/index.js";
 
 const localeTranslations = {
   ar,
+  de,
   en,
   "en-GB": en_GB,
   es,
+  fr,
   it,
+  ja,
+  nl,
+  pt,
+  "pt-BR": pt_BR,
+  zh,
 };
 
 export const loadLocale = (locale: Locales): void => {

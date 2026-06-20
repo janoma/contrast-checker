@@ -1,5 +1,5 @@
 import { type ColorInstance } from "color";
-import { Check, Copy, RotateCw } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -40,7 +40,7 @@ const MDN_LINKS = [
 
 export default function App() {
   const { LL, locale } = useI18nContext();
-  const { next: nextQuote, quote } = useSampleQuote(locale);
+  const quote = useSampleQuote(locale);
 
   const init = useMemo(() => readUrlParams(), []);
 
@@ -166,23 +166,6 @@ export default function App() {
     }, 1800);
   }, [permalink]);
 
-  const sampleTextNode = quote ? (
-    <div className="flex justify-between items-start gap-2">
-      {quote}
-      <button
-        aria-label="New quote"
-        className="bg-black text-white p-1 rounded hover:invert"
-        onClick={() => {
-          nextQuote(quote);
-        }}
-        title="New quote"
-        type="button"
-      >
-        <RotateCw size={13} />
-      </button>
-    </div>
-  ) : null;
-
   return (
     <div className="lg:max-w-[calc(var(--container-5xl)-4rem)] lg:mx-auto lg:border lg:rounded-lg p-3 sm:p-6 lg:my-8 bg-taupe-50">
       <div className="sr-only focus-within:not-sr-only flex justify-center">
@@ -273,9 +256,7 @@ export default function App() {
           bgCss={bgCss}
           fgCss={fgCss}
           heading={LL.normalText()}
-          previewContent={
-            <p className="text-base leading-relaxed">{sampleTextNode}</p>
-          }
+          previewContent={<p className="text-base leading-relaxed">{quote}</p>}
           wcagRows={[
             { label: "WCAG AA", pass: normalAA },
             { label: "WCAG AAA", pass: normalAAA },
@@ -287,7 +268,7 @@ export default function App() {
           fgCss={fgCss}
           heading={LL.largeText()}
           previewContent={
-            <p className="text-2xl font-bold leading-snug">{sampleTextNode}</p>
+            <p className="text-2xl font-bold leading-snug">{quote}</p>
           }
           wcagRows={[
             { label: "WCAG AA", pass: largeAA },
