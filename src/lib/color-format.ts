@@ -85,3 +85,23 @@ export function formatLab(c: ColorInstance): string {
     ? `lab(${lStr} ${aStr} ${bStr} / ${num(a)})`
     : `lab(${lStr} ${aStr} ${bStr})`;
 }
+
+/**
+ * Re-serialize `raw` in the same format the user typed, but canonicalized.
+ * Falls back to hex for named colors and unrecognized inputs.
+ */
+export function normalizeColorInput(
+  raw: unknown,
+  color: ColorInstance,
+): string {
+  if (typeof raw !== "string") return formatHex(color);
+  const sl = raw.trim().toLowerCase();
+  if (sl.startsWith("oklch(")) return formatOklch(color);
+  if (sl.startsWith("oklab(")) return formatOklab(color);
+  if (sl.startsWith("lch(")) return formatLch(color);
+  if (sl.startsWith("lab(")) return formatLab(color);
+  if (sl.startsWith("hsl")) return formatHsl(color); // hsl( and hsla(
+  if (sl.startsWith("hwb(")) return formatHwb(color);
+  if (sl.startsWith("rgb")) return formatRgb(color); // rgb( and rgba(
+  return formatHex(color); // hex (with or without #) and named keywords
+}

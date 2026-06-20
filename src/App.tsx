@@ -1,3 +1,4 @@
+import { normalizeColorInput } from "@/lib/color-format";
 import { colorToCss, compositeAlpha } from "@/lib/color-utils";
 import { readUrlParams } from "@/lib/url-params";
 import { type ColorInstance } from "color";
@@ -14,14 +15,21 @@ export default function App() {
   const init = useMemo(() => readUrlParams(), []);
   const [fgColor, setFgColor] = useState<ColorInstance>(init.fgColor);
   const [bgColor, setBgColor] = useState<ColorInstance>(init.bgColor);
+  // The format string the user last confirmed for each panel (null = derived hex)
+  const [fgDisplay, setFgDisplay] = useState<string | null>(() =>
+    normalizeColorInput(init.fgRaw, init.fgColor),
+  );
+  const [bgDisplay, setBgDisplay] = useState<string | null>(() =>
+    normalizeColorInput(init.bgRaw, init.bgColor),
+  );
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    url.searchParams.set("fcolor", fgColor.hex().slice(1));
-    url.searchParams.set("bcolor", bgColor.hex().slice(1));
+    url.searchParams.set("fcolor", fgDisplay ?? fgColor.hex().slice(1));
+    url.searchParams.set("bcolor", bgDisplay ?? bgColor.hex().slice(1));
     url.searchParams.set("alpha", fgColor.alpha().toFixed(2));
     window.history.replaceState(null, "", url.toString());
-  }, [fgColor, bgColor]);
+  }, [fgColor, bgColor, fgDisplay, bgDisplay]);
 
   const effectiveFg = useMemo(
     () => compositeAlpha(fgColor, bgColor),
@@ -47,7 +55,12 @@ export default function App() {
 
   const [permalinkCopied, setPermalinkCopied] = useState(false);
 
-  const permalink = `${window.location.origin}${window.location.pathname}?fcolor=${fgColor.hex().slice(1)}&bcolor=${bgColor.hex().slice(1)}&alpha=${fgColor.alpha().toFixed(2)}`;
+  const permalinkParams = new URLSearchParams({
+    fcolor: fgDisplay ?? fgColor.hex().slice(1),
+    bcolor: bgDisplay ?? bgColor.hex().slice(1),
+    alpha: fgColor.alpha().toFixed(2),
+  });
+  const permalink = `${window.location.origin}${window.location.pathname}?${permalinkParams.toString()}`;
 
   const copyPermalink = useCallback(() => {
     void navigator.clipboard.writeText(permalink);
@@ -69,19 +82,27 @@ export default function App() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-sm mx-auto sm:max-w-none">
         <ColorPanel
+          id="fg-color"
           title="Foreground"
           color={fgColor}
           showAlpha
           onChange={setFgColor}
+          displayValue={fgDisplay ?? undefined}
+          onCommit={setFgDisplay}
         />
-        <ColorPanel title="Background" color={bgColor} onChange={setBgColor} />
+        <ColorPanel
+          id="bg-color"
+          title="Background"
+          color={bgColor}
+          onChange={setBgColor}
+          displayValue={bgDisplay ?? undefined}
+          onCommit={setBgDisplay}
+        />
       </div>
 
       <div className="flex flex-col items-stretch sm:items-center gap-2 max-w-sm mx-auto sm:max-w-none">
         <div className="border rounded-xl px-12 py-5 text-center bg-background">
-          <p className="text-sm text-muted-foreground mb-1 font-medium">
-            Contrast Ratio
-          </p>
+          <h2>Contrast Ratio</h2>
           <p className="text-6xl font-bold tracking-tight leading-none">
             {contrastRatio.toFixed(2)}
             <span className="font-normal text-muted-foreground">:1</span>

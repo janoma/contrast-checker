@@ -17,9 +17,7 @@ export function PreviewSection({
 }: PreviewSectionProps) {
   return (
     <section className="space-y-3">
-      <h2 className="example">
-        {heading}
-      </h2>
+      <h2 className="example">{heading}</h2>
       <div className="flex flex-col sm:flex-row items-stretch gap-3 sm:gap-6">
         <div className="space-y-2 shrink-0 flex flex-col justify-center">
           {wcagRows.map((r) => (

@@ -89,6 +89,12 @@
   h2.example {
     @apply font-heading text-2xl normal-case font-bold border-b border-red-200 pb-1;
   }
+  label {
+    @apply text-sm text-muted-foreground text-center;
+  }
+  button.replace {
+    @apply text-sm bg-muted text-muted-foreground border rounded inline-flex gap-1.5 items-center justify-center;
+  }
 }
 
 .range-slider {

@@ -1,25 +1,37 @@
 import { Slider } from "@/components/ui/slider";
+import { normalizeColorInput } from "@/lib/color-format";
 import { parseColorInput } from "@/lib/color-parser";
 import { lightnessGradientFromColor } from "@/lib/color-utils";
 import Color, { type ColorInstance } from "color";
+import { AlertTriangle, ChevronsUp } from "lucide-react";
 import { useCallback, useState } from "react";
 import { ColorFormats } from "./ColorFormats";
-import { AlertTriangle } from "lucide-react";
 
 export interface ColorPanelProps {
+  id: string;
   title: string;
   color: ColorInstance;
   showAlpha?: boolean;
   onChange: (color: ColorInstance) => void;
+  /** Externally committed display string (the last format the user confirmed). */
+  displayValue?: string;
+  /**
+   * Called when the committed display string changes.
+   * Pass `null` to signal that the format has been reset to the derived hex.
+   */
+  onCommit?: (normalized: string | null) => void;
 }
 
 export function ColorPanel({
+  id,
   title,
   color,
   showAlpha = false,
   onChange,
+  displayValue,
+  onCommit,
 }: ColorPanelProps) {
-  // null = not editing (display derived value), string = user is typing
+  // null = not editing (display derived/committed value), string = user is typing
   const [rawInput, setRawInput] = useState<string | null>(null);
   const [rawAlpha, setRawAlpha] = useState<string | null>(null);
   const [outOfGamut, setOutOfGamut] = useState(false);
@@ -27,9 +39,10 @@ export function ColorPanel({
   const alpha = color.alpha();
 
   const derivedDisplay =
-    alpha < 1 && showAlpha
+    displayValue ??
+    (alpha < 1 && showAlpha
       ? color.hexa().toUpperCase()
-      : color.hex().toUpperCase();
+      : color.hex().toUpperCase());
   const displayInput = rawInput ?? derivedDisplay;
   const displayAlpha = rawAlpha ?? alpha.toFixed(2);
 
@@ -43,9 +56,11 @@ export function ColorPanel({
       const finalColor = showAlpha ? result.color : result.color.alpha(1);
       onChange(finalColor);
       setOutOfGamut(result.outOfGamut);
+      const normalized = normalizeColorInput(val, finalColor);
+      onCommit?.(normalized);
       setRawInput(null);
     },
-    [showAlpha, onChange],
+    [showAlpha, onChange, onCommit],
   );
 
   const applyAlpha = useCallback(
@@ -53,10 +68,12 @@ export function ColorPanel({
       const v = parseFloat(val);
       if (!isNaN(v)) {
         onChange(color.alpha(Math.max(0, Math.min(1, v))));
+        // Reset the display format so the hex (which encodes alpha) is shown
+        onCommit?.(null);
       }
       setRawAlpha(null);
     },
-    [color, onChange],
+    [color, onChange, onCommit],
   );
 
   const lightness = color.lightness();
@@ -65,11 +82,12 @@ export function ColorPanel({
     (value: number) => {
       try {
         onChange(color.lightness(value).alpha(color.alpha()));
+        onCommit?.(null);
       } catch {
         // ignore invalid color states
       }
     },
-    [color, onChange],
+    [color, onChange, onCommit],
   );
 
   const gradient = lightnessGradientFromColor(color);
@@ -80,13 +98,13 @@ export function ColorPanel({
       <h2>{title}</h2>
 
       <div>
-        <p className="text-sm text-muted-foreground text-center mb-1">
-          Color Value
-        </p>
+        <label htmlFor={id}>Color Value</label>
         <input
+          id={id}
           className="w-full border rounded px-2 py-1.5 text-sm font-mono"
           value={displayInput}
           spellCheck={false}
+          maxLength={60}
           onFocus={(e) => {
             e.target.select();
           }}
@@ -103,12 +121,31 @@ export function ColorPanel({
       </div>
 
       {outOfGamut && (
-        <div className="flex items-start gap-1.5 bg-warning border rounded p-2 text-sm text-warning-foreground leading-snug">
-          <AlertTriangle size={32} className="place-self-center mx-2" />
-          <span>
-            This color is outside sRGB. The closest sRGB approximation is shown.
-            WCAG contrast is calculated on the sRGB version.
-          </span>
+        <div className="space-y-3">
+          <label htmlFor={`${id}-out-of-gamut`}>Color approximation</label>
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              id={`${id}-out-of-gamut`}
+              className="w-full border rounded px-2 py-1.5 text-sm font-mono"
+              value={color.hex()}
+            />
+            <button
+              className="replace"
+              onClick={() => {
+                setRawInput(color.hex());
+                applyInput(color.hex());
+              }}
+            >
+              Replace <ChevronsUp size={14} />
+            </button>
+          </div>
+          <div className="flex items-start gap-1.5 bg-warning border rounded p-2 text-sm text-warning-foreground leading-snug">
+            <AlertTriangle size={32} className="place-self-center mx-2" />
+            <span>
+              This color is outside sRGB. A close sRGB approximation is shown.
+              WCAG contrast is calculated on the sRGB version.
+            </span>
+          </div>
         </div>
       )}
 
@@ -124,6 +161,7 @@ export function ColorPanel({
             onChange={(e) => {
               const picked = Color(e.target.value);
               onChange(showAlpha ? picked.alpha(alpha) : picked);
+              onCommit?.(null);
             }}
           />
         </div>
