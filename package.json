@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "i18n": "typesafe-i18n --no-watch",
+    "i18n:watch": "typesafe-i18n",
     "build": "tsc -b && vite build",
+    "prebuild": "pnpm i18n",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
@@ -18,7 +21,8 @@
     "color": "^5.0.3",
     "lucide-react": "^1.21.0",
     "preact": "^10.29.2",
-    "tailwindcss": "^4.3.1"
+    "tailwindcss": "^4.3.1",
+    "typesafe-i18n": "^5.27.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

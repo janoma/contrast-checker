@@ -1,5 +1,5 @@
 import { type ColorInstance } from "color";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, RotateCw } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -8,6 +8,8 @@ import {
   useState,
 } from "preact/hooks";
 
+import { useSampleQuote } from "@/hooks/useSampleQuote";
+import { useI18nContext } from "@/i18n/i18n-react";
 import { normalizeColorInput } from "@/lib/color-format";
 import {
   colorToCss,
@@ -18,12 +20,28 @@ import { readUrlParams } from "@/lib/url-params";
 
 import { ColorPanel } from "./components/ColorPanel";
 import { PreviewSection } from "./components/PreviewSection";
+import { WrapTranslation } from "./components/WrapTranslation";
 import { cn } from "./lib/utils";
 
-const SAMPLE_TEXT =
-  "I will not say 'do not weep,' for not all tears are an evil.";
+// MDN links in the same order as the <> markers in nerdyReferencesText.
+const MDN_LINKS = [
+  "https://developer.mozilla.org/en-US/docs/Glossary/RGB",
+  "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/hex-color",
+  "https://developer.mozilla.org/en-US/docs/Glossary/Color_space",
+  "https://developer.mozilla.org/en-US/docs/Glossary/Gamut",
+  "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/rgb",
+  "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/hsl",
+  "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/hwb",
+  "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklch",
+  "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklab",
+  "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/lch",
+  "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/lab",
+];
 
 export default function App() {
+  const { LL, locale } = useI18nContext();
+  const { next: nextQuote, quote } = useSampleQuote(locale);
+
   const init = useMemo(() => readUrlParams(), []);
 
   // When no URL params are present, generate a random AAA-passing pair once
@@ -148,30 +166,49 @@ export default function App() {
     }, 1800);
   }, [permalink]);
 
+  const sampleTextNode = quote ? (
+    <div className="flex justify-between items-start gap-2">
+      {quote}
+      <button
+        aria-label="New quote"
+        className="bg-black text-white p-1 rounded hover:invert"
+        onClick={() => {
+          nextQuote(quote);
+        }}
+        title="New quote"
+        type="button"
+      >
+        <RotateCw size={13} />
+      </button>
+    </div>
+  ) : null;
+
   return (
     <div className="lg:max-w-[calc(var(--container-5xl)-4rem)] lg:mx-auto lg:border lg:rounded-lg p-3 sm:p-6 lg:my-8 bg-taupe-50">
       <div className="sr-only focus-within:not-sr-only flex justify-center">
         <a className="py-2 px-4 border-0" href="#main-content">
-          Skip to main content
+          {LL.skipToMain()}
         </a>
       </div>
       <header className="mb-4">
-        <h1>Contrast Checker</h1>
+        <h1>{LL.appTitle()}</h1>
         <p className="text-sm mt-1">
-          WCAG 2.0 and 2.1 contrast ratio calculator. Based on the{" "}
-          <a
-            className={cn(
-              "border-b-2 border-double border-primary-foreground text-primary-foreground",
-              "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent",
-              "focus:text-accent-foreground focus:border-accent-foreground focus:bg-accent",
-              "outline-0 outline-offset-0",
+          <WrapTranslation
+            message={LL.introText()}
+            renderLink={(text) => (
+              <a
+                className={cn(
+                  "border-b-2 border-double border-primary-foreground text-primary-foreground",
+                  "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent",
+                  "focus:text-accent-foreground focus:border-accent-foreground focus:bg-accent",
+                  "outline-0 outline-offset-0",
+                )}
+                href="https://webaim.org/resources/contrastchecker/"
+              >
+                {text}
+              </a>
             )}
-            href="https://webaim.org/resources/contrastchecker/"
-          >
-            Contrast Checker
-          </a>{" "}
-          tool by WebAIM, with support for more color formats. Accepts HEX, RGB,
-          HSL, HWB, OKLCH, OKLAB, LCH, and LAB.
+          />
         </p>
       </header>
 
@@ -187,7 +224,7 @@ export default function App() {
             onHistoryPush={handleHistoryPush}
             onSliderChange={handleSliderChange}
             showAlpha
-            title="Foreground"
+            title={LL.foreground()}
           />
           <ColorPanel
             color={bgColor}
@@ -198,13 +235,13 @@ export default function App() {
             onCommit={setBgDisplay}
             onHistoryPush={handleHistoryPush}
             onSliderChange={handleSliderChange}
-            title="Background"
+            title={LL.background()}
           />
         </div>
 
         <div className="flex flex-col items-stretch sm:items-center gap-2 max-w-sm mx-auto sm:max-w-none">
           <div className="border rounded-xl px-12 py-5 text-center bg-background">
-            <h2>Contrast Ratio</h2>
+            <h2>{LL.contrastRatio()}</h2>
             <p className="text-6xl font-bold tracking-tight leading-none">
               {contrastRatio.toFixed(2)}
               <span className="font-normal text-muted-foreground">:1</span>
@@ -220,12 +257,12 @@ export default function App() {
           >
             {permalinkCopied ? (
               <>
-                copied!
+                {LL.copied()}
                 <Check className="text-success" size={12} />
               </>
             ) : (
               <>
-                permalink
+                {LL.permalink()}
                 <Copy size={12} />
               </>
             )}
@@ -235,9 +272,9 @@ export default function App() {
         <PreviewSection
           bgCss={bgCss}
           fgCss={fgCss}
-          heading="Normal Text"
+          heading={LL.normalText()}
           previewContent={
-            <p className="text-base leading-relaxed">{SAMPLE_TEXT}</p>
+            <p className="text-base leading-relaxed">{sampleTextNode}</p>
           }
           wcagRows={[
             { label: "WCAG AA", pass: normalAA },
@@ -248,9 +285,9 @@ export default function App() {
         <PreviewSection
           bgCss={bgCss}
           fgCss={fgCss}
-          heading="Large Text"
+          heading={LL.largeText()}
           previewContent={
-            <p className="text-2xl font-bold leading-snug">{SAMPLE_TEXT}</p>
+            <p className="text-2xl font-bold leading-snug">{sampleTextNode}</p>
           }
           wcagRows={[
             { label: "WCAG AA", pass: largeAA },
@@ -261,11 +298,11 @@ export default function App() {
         <PreviewSection
           bgCss={bgCss}
           fgCss={fgCss}
-          heading="Graphical Objects and User Interface Components"
+          heading={LL.graphicsAndUi()}
           previewContent={
             <div className="flex flex-col items-center gap-4">
               <svg
-                aria-label="Star"
+                aria-label={LL.ariaLabelStar()}
                 fill="currentColor"
                 height="36"
                 viewBox="0 0 24 24"
@@ -275,9 +312,9 @@ export default function App() {
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
               <input
-                aria-label="Text Input"
+                aria-label={LL.ariaLabelTextInput()}
                 className="rounded px-3 py-1.5 text-sm bg-background text-foreground"
-                defaultValue="Text Input"
+                defaultValue={LL.ariaLabelTextInput()}
                 onKeyDown={(e) => {
                   e.stopPropagation();
                 }}
@@ -291,54 +328,14 @@ export default function App() {
       </main>
 
       <footer className="text-sm bg-muted border rounded-lg p-4 mt-16">
-        <h2>Nerdy references</h2>
+        <h2>{LL.nerdyReferences()}</h2>
         <p>
-          Mozilla Developer Network has good documentation on various color
-          topics:{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Glossary/RGB">
-            RGB color model
-          </a>
-          ,{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/hex-color">
-            Hex
-          </a>{" "}
-          (for the <em>hexadecimal</em> color representation),{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Glossary/Color_space">
-            Color Space
-          </a>
-          ,{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Glossary/Gamut">
-            Gamut
-          </a>
-          , and the various CSS color functions:{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/rgb">
-            RGB
-          </a>
-          ,{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/hsl">
-            HSL
-          </a>
-          ,{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/hwb">
-            HWB
-          </a>
-          ,{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklch">
-            OKLCH
-          </a>
-          ,{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklab">
-            OKLAB
-          </a>
-          ,{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/lch">
-            LCH
-          </a>
-          , and{" "}
-          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/lab">
-            LAB
-          </a>
-          .
+          <WrapTranslation
+            message={LL.nerdyReferencesText()}
+            renderLink={(text: string, index: number) => (
+              <a href={MDN_LINKS[index]}>{text}</a>
+            )}
+          />
         </p>
       </footer>
     </div>

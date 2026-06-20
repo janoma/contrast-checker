@@ -2,6 +2,7 @@ import { type ColorInstance } from "color";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useState } from "preact/hooks";
 
+import { useI18nContext } from "@/i18n/i18n-react";
 import {
   formatHex,
   formatHsl,
@@ -24,6 +25,8 @@ export function ColorFormats({
   color: ColorInstance;
   id: string;
 }) {
+  const { LL } = useI18nContext();
+
   const [open, setOpen] = useState(
     () => localStorage.getItem(`color-formats-open-${id}`) === "true",
   );
@@ -34,7 +37,7 @@ export function ColorFormats({
 
   const formats = useMemo(
     () => [
-      { label: "Name", value: formatName(color) },
+      { label: LL.colorFormatNameLabel(), value: formatName(color) },
       { label: "HEX", value: formatHex(color) },
       { label: "RGB", value: formatRgb(color) },
       { label: "HSL", value: formatHsl(color) },
@@ -44,7 +47,7 @@ export function ColorFormats({
       { label: "LCH", value: formatLch(color) },
       { label: "LAB", value: formatLab(color) },
     ],
-    [color],
+    [color, LL],
   );
 
   return (
@@ -55,7 +58,7 @@ export function ColorFormats({
           setOpen((o) => !o);
         }}
       >
-        <span>Color formats</span>
+        <span>{LL.colorFormats()}</span>
         <ChevronDown
           className={cn("transition-transform", open ? "rotate-180" : "")}
           size={14}
@@ -64,7 +67,12 @@ export function ColorFormats({
       {open && (
         <div className="mt-2 border rounded-md bg-muted/50 px-2 pb-1 pt-0.5">
           {formats.map((f) => (
-            <FormatRow key={f.label} label={f.label} value={f.value} />
+            <FormatRow
+              key={f.label}
+              label={f.label}
+              orLabel={LL.colorFormatOr()}
+              value={f.value}
+            />
           ))}
         </div>
       )}
@@ -74,9 +82,11 @@ export function ColorFormats({
 
 function FormatRow({
   label,
+  orLabel,
   value,
 }: {
   label: string;
+  orLabel: string;
   value: [string, string] | string;
 }) {
   return (
@@ -89,7 +99,8 @@ function FormatRow({
           value
         ) : (
           <>
-            <CopyButton className="text-foreground" show text={value[0]} /> or{" "}
+            <CopyButton className="text-foreground" show text={value[0]} />{" "}
+            {orLabel}{" "}
             <CopyButton className="text-foreground" show text={value[1]} />
           </>
         )}

@@ -25,6 +25,9 @@ importers:
       tailwindcss:
         specifier: ^4.3.1
         version: 4.3.1
+      typesafe-i18n:
+        specifier: ^5.27.1
+        version: 5.27.1(typescript@6.0.3)
     devDependencies:
       "@eslint/js":
         specifier: ^10.0.1
@@ -1974,6 +1977,15 @@ packages:
       }
     engines: { node: ">= 0.8.0" }
 
+  typesafe-i18n@5.27.1:
+    resolution:
+      {
+        integrity: sha512-749uWo2ZXETT//kWjVYPm8QPYR8xLh8G0wLfoAyCAtAmysX67uCaAyLjAjAWojL6fuJpE5B6yIjwvO9orXzUPg==,
+      }
+    hasBin: true
+    peerDependencies:
+      typescript: ">=3.5.1"
+
   typescript-eslint@8.61.1:
     resolution:
       {
@@ -3223,6 +3235,10 @@ snapshots:
   type-check@0.4.0:
     dependencies:
       prelude-ls: 1.2.1
+
+  typesafe-i18n@5.27.1(typescript@6.0.3):
+    dependencies:
+      typescript: 6.0.3
 
   typescript-eslint@8.61.1(eslint@10.5.0(jiti@2.7.0))(typescript@6.0.3):
     dependencies:

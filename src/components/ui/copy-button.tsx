@@ -1,6 +1,8 @@
 import { Check, Copy } from "lucide-react";
 import { useCallback, useState } from "preact/hooks";
 
+import { useI18nContext } from "@/i18n/i18n-react";
+
 export default function CopyButton({
   className,
   show,
@@ -10,6 +12,7 @@ export default function CopyButton({
   show?: boolean;
   text: string;
 }) {
+  const { LL } = useI18nContext();
   const [copied, setCopied] = useState(false);
 
   const copy = useCallback(() => {
@@ -24,7 +27,7 @@ export default function CopyButton({
     <button
       className="shrink-0 rounded hover:bg-muted text-muted-foreground transition-colors inline-flex items-center gap-1 px-1.5 py-0 aspect-square"
       onClick={copy}
-      title={`Copy ${text}`}
+      title={LL.copyButtonTitle({ text })}
     >
       {show && <span className={className}>{text}</span>}
       {copied ? (

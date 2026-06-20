@@ -76,6 +76,13 @@
 }
 
 @layer base {
+  /* Reinforce the dir attribute so it always wins over any preflight reset. */
+  [dir="rtl"] {
+    direction: rtl;
+  }
+  [dir="ltr"] {
+    direction: ltr;
+  }
   * {
     @apply border-border outline-ring/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
   }

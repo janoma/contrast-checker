@@ -1,3 +1,5 @@
+import { useI18nContext } from "@/i18n/i18n-react";
+
 export function WcagRow({ label, pass }: { label: string; pass: boolean }) {
   return (
     <div className="flex justify-between sm:justify-start items-center gap-3">
@@ -8,13 +10,15 @@ export function WcagRow({ label, pass }: { label: string; pass: boolean }) {
 }
 
 function Badge({ pass }: { pass: boolean }) {
+  const { LL } = useI18nContext();
+
   return (
     <span
       className={`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-bold tracking-wide text-white ${
         pass ? "bg-success" : "bg-failure"
       }`}
     >
-      {pass ? "Pass" : "Fail"}
+      {pass ? LL.pass() : LL.fail()}
     </span>
   );
 }

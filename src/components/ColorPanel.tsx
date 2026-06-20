@@ -3,6 +3,7 @@ import { AlertTriangle, ChevronsUp } from "lucide-react";
 import { useCallback, useEffect, useState } from "preact/hooks";
 
 import { Slider } from "@/components/ui/slider";
+import { useI18nContext } from "@/i18n/i18n-react";
 import { normalizeColorInput } from "@/lib/color-format";
 import { parseColorInput } from "@/lib/color-parser";
 import { lightnessGradientFromColor } from "@/lib/color-utils";
@@ -42,6 +43,8 @@ export function ColorPanel({
   showAlpha = false,
   title,
 }: ColorPanelProps) {
+  const { LL } = useI18nContext();
+
   // null = not editing (display derived/committed value), string = user is typing
   const [rawInput, setRawInput] = useState<null | string>(null);
   const [rawAlpha, setRawAlpha] = useState<null | string>(null);
@@ -122,7 +125,7 @@ export function ColorPanel({
       <h2 className="text-center">{title}</h2>
 
       <div>
-        <label htmlFor={id}>Color Value</label>
+        <label htmlFor={id}>{LL.colorValue()}</label>
         <div className="flex items-center gap-2">
           <span
             className={cn(
@@ -160,7 +163,9 @@ export function ColorPanel({
 
       {outOfGamut && (
         <div className="space-y-3">
-          <label htmlFor={`${id}-out-of-gamut`}>Color approximation</label>
+          <label htmlFor={`${id}-out-of-gamut`}>
+            {LL.colorApproximation()}
+          </label>
           <div className="grid grid-cols-2 gap-2">
             <input
               className="w-full border rounded px-2 py-1.5 text-sm font-mono"
@@ -174,22 +179,19 @@ export function ColorPanel({
                 applyInput(color.hex());
               }}
             >
-              Replace <ChevronsUp size={14} />
+              {LL.replace()} <ChevronsUp size={14} />
             </button>
           </div>
           <div className="flex items-start gap-1.5 bg-warning border rounded p-2 text-sm text-warning-foreground leading-snug">
             <AlertTriangle className="place-self-center mx-2" size={32} />
-            <span>
-              This color is outside sRGB. A close sRGB approximation is shown.
-              WCAG contrast is calculated on the sRGB version.
-            </span>
+            <span>{LL.outOfGamutWarning()}</span>
           </div>
         </div>
       )}
 
       <div className="flex gap-3 items-end">
         <div className="flex-1">
-          <label htmlFor={`${id}-color-picker`}>Color Picker</label>
+          <label htmlFor={`${id}-color-picker`}>{LL.colorPicker()}</label>
           <input
             className="w-full h-10 cursor-pointer rounded border p-0.5"
             id={`${id}-color-picker`}
@@ -205,7 +207,7 @@ export function ColorPanel({
         </div>
         {showAlpha && (
           <div className="w-16">
-            <label htmlFor={`${id}-alpha`}>Alpha</label>
+            <label htmlFor={`${id}-alpha`}>{LL.alpha()}</label>
             <input
               className="w-full h-10 border rounded px-2 py-1.5 text-sm text-center"
               id={`${id}-alpha`}
@@ -227,7 +229,7 @@ export function ColorPanel({
       </div>
 
       <div>
-        <label htmlFor={`${id}-lightness`}>Lightness</label>
+        <label htmlFor={`${id}-lightness`}>{LL.lightness()}</label>
         <div className="relative">
           <div
             aria-hidden
