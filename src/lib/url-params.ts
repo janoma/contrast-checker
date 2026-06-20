@@ -1,11 +1,12 @@
 import Color, { type ColorInstance } from "color";
+
 import { parseColorInput } from "./color-parser";
 
 export function readUrlParams(): {
-  fgColor: ColorInstance;
   bgColor: ColorInstance;
-  fgRaw: string;
   bgRaw: string;
+  fgColor: ColorInstance;
+  fgRaw: string;
 } {
   const p = new URLSearchParams(window.location.search);
   const rawFg = p.get("fcolor") ?? "000000";
@@ -23,9 +24,9 @@ export function readUrlParams(): {
   };
 
   return {
-    fgColor: fgResult.color.alpha(alpha),
     bgColor: bgResult.color.alpha(1),
-    fgRaw: rawFg,
     bgRaw: rawBg,
+    fgColor: fgResult.color.alpha(alpha),
+    fgRaw: rawFg,
   };
 }

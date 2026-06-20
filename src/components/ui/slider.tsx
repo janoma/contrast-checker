@@ -1,35 +1,35 @@
 import { cn } from "@/lib/utils";
 
 interface SliderProps {
-  value?: number[];
-  defaultValue?: number[];
-  min?: number;
-  max?: number;
-  step?: number;
-  onValueChange?: (value: number[]) => void;
   className?: string;
+  defaultValue?: number[];
+  max?: number;
+  min?: number;
+  onValueChange?: (value: number[]) => void;
+  step?: number;
+  value?: number[];
 }
 
 function Slider({
-  value,
-  defaultValue,
-  min = 0,
-  max = 100,
-  step = 1,
-  onValueChange,
   className,
+  defaultValue,
+  max = 100,
+  min = 0,
+  onValueChange,
+  step = 1,
+  value,
 }: SliderProps) {
   const currentValue = value?.[0] ?? defaultValue?.[0] ?? min;
 
   return (
     <input
-      type="range"
-      min={min}
-      max={max}
-      step={step}
-      value={currentValue}
-      onChange={(e) => onValueChange?.([parseFloat(e.target.value)])}
       className={cn("range-slider", className)}
+      max={max}
+      min={min}
+      onChange={(e) => onValueChange?.([parseFloat(e.target.value)])}
+      step={step}
+      type="range"
+      value={currentValue}
     />
   );
 }

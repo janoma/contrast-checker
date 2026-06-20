@@ -1,10 +1,6 @@
 import { type ColorInstance } from "color";
-import { toOklab, toOklch } from "./oklab";
 
-/** Format a finite number to d decimal places; NaN/Infinity → "0". */
-export function num(v: number, d = 2): string {
-  return isFinite(v) ? v.toFixed(d) : "0";
-}
+import { toOklab, toOklch } from "./oklab";
 
 /** Hue is "none" for achromatic colors (C ≈ 0) to match CSS spec. */
 export function fmtHue(C: number, H: number): string {
@@ -14,14 +10,6 @@ export function fmtHue(C: number, H: number): string {
 export function formatHex(c: ColorInstance): string {
   const a = c.alpha();
   return a < 1 ? c.hexa().toUpperCase() : c.hex().toUpperCase();
-}
-
-export function formatRgb(c: ColorInstance): string {
-  const r = Math.round(c.red()).toString();
-  const g = Math.round(c.green()).toString();
-  const b = Math.round(c.blue()).toString();
-  const a = c.alpha();
-  return a < 1 ? `rgba(${r}, ${g}, ${b}, ${num(a)})` : `rgb(${r} ${g} ${b})`;
 }
 
 export function formatHsl(c: ColorInstance): string {
@@ -42,26 +30,15 @@ export function formatHwb(c: ColorInstance): string {
   return a < 1 ? `${base} / ${num(a)}` : base;
 }
 
-export function formatOklch(c: ColorInstance): string {
-  const [L, C, H] = toOklch(c);
+export function formatLab(c: ColorInstance): string {
+  const arr = c.lab().array() as [number, number, number];
   const a = c.alpha();
-  const lStr = num(L, 4);
-  const cStr = num(C, 4);
-  const hStr = fmtHue(C, H);
+  const lStr = num(arr[0], 2);
+  const aStr = num(arr[1], 2);
+  const bStr = num(arr[2], 2);
   return a < 1
-    ? `oklch(${lStr} ${cStr} ${hStr} / ${num(a)})`
-    : `oklch(${lStr} ${cStr} ${hStr})`;
-}
-
-export function formatOklab(c: ColorInstance): string {
-  const [L, a, b] = toOklab(c);
-  const alpha = c.alpha();
-  const lStr = num(L, 4);
-  const aStr = num(a, 4);
-  const bStr = num(b, 4);
-  return alpha < 1
-    ? `oklab(${lStr} ${aStr} ${bStr} / ${num(alpha)})`
-    : `oklab(${lStr} ${aStr} ${bStr})`;
+    ? `lab(${lStr} ${aStr} ${bStr} / ${num(a)})`
+    : `lab(${lStr} ${aStr} ${bStr})`;
 }
 
 export function formatLch(c: ColorInstance): string {
@@ -75,15 +52,34 @@ export function formatLch(c: ColorInstance): string {
     : `lch(${lStr} ${cStr} ${hStr})`;
 }
 
-export function formatLab(c: ColorInstance): string {
-  const arr = c.lab().array() as [number, number, number];
+export function formatOklab(c: ColorInstance): string {
+  const [L, a, b] = toOklab(c);
+  const alpha = c.alpha();
+  const lStr = num(L, 4);
+  const aStr = num(a, 4);
+  const bStr = num(b, 4);
+  return alpha < 1
+    ? `oklab(${lStr} ${aStr} ${bStr} / ${num(alpha)})`
+    : `oklab(${lStr} ${aStr} ${bStr})`;
+}
+
+export function formatOklch(c: ColorInstance): string {
+  const [L, C, H] = toOklch(c);
   const a = c.alpha();
-  const lStr = num(arr[0], 2);
-  const aStr = num(arr[1], 2);
-  const bStr = num(arr[2], 2);
+  const lStr = num(L, 4);
+  const cStr = num(C, 4);
+  const hStr = fmtHue(C, H);
   return a < 1
-    ? `lab(${lStr} ${aStr} ${bStr} / ${num(a)})`
-    : `lab(${lStr} ${aStr} ${bStr})`;
+    ? `oklch(${lStr} ${cStr} ${hStr} / ${num(a)})`
+    : `oklch(${lStr} ${cStr} ${hStr})`;
+}
+
+export function formatRgb(c: ColorInstance): string {
+  const r = Math.round(c.red()).toString();
+  const g = Math.round(c.green()).toString();
+  const b = Math.round(c.blue()).toString();
+  const a = c.alpha();
+  return a < 1 ? `rgba(${r}, ${g}, ${b}, ${num(a)})` : `rgb(${r} ${g} ${b})`;
 }
 
 /**
@@ -104,4 +100,9 @@ export function normalizeColorInput(
   if (sl.startsWith("hwb(")) return formatHwb(color);
   if (sl.startsWith("rgb")) return formatRgb(color); // rgb( and rgba(
   return formatHex(color); // hex (with or without #) and named keywords
+}
+
+/** Format a finite number to d decimal places; NaN/Infinity → "0". */
+export function num(v: number, d = 2): string {
+  return isFinite(v) ? v.toFixed(d) : "0";
 }

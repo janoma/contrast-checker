@@ -1,19 +1,19 @@
 import { WcagRow } from "./WcagRow";
 
 interface PreviewSectionProps {
-  heading: string;
-  wcagRows: { label: string; pass: boolean }[];
-  fgCss: string;
   bgCss: string;
+  fgCss: string;
+  heading: string;
   previewContent: React.ReactNode;
+  wcagRows: { label: string; pass: boolean }[];
 }
 
 export function PreviewSection({
-  heading,
-  wcagRows,
-  fgCss,
   bgCss,
+  fgCss,
+  heading,
   previewContent,
+  wcagRows,
 }: PreviewSectionProps) {
   return (
     <section className="space-y-3">

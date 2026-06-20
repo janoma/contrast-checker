@@ -1,9 +1,11 @@
-import { normalizeColorInput } from "@/lib/color-format";
-import { colorToCss, compositeAlpha } from "@/lib/color-utils";
-import { readUrlParams } from "@/lib/url-params";
 import { type ColorInstance } from "color";
 import { Check, Copy, ExternalLink } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+
+import { normalizeColorInput } from "@/lib/color-format";
+import { colorToCss, compositeAlpha } from "@/lib/color-utils";
+import { readUrlParams } from "@/lib/url-params";
+
 import { ColorPanel } from "./components/ColorPanel";
 import { PreviewSection } from "./components/PreviewSection";
 import { cn } from "./lib/utils";
@@ -16,10 +18,10 @@ export default function App() {
   const [fgColor, setFgColor] = useState<ColorInstance>(init.fgColor);
   const [bgColor, setBgColor] = useState<ColorInstance>(init.bgColor);
   // The format string the user last confirmed for each panel (null = derived hex)
-  const [fgDisplay, setFgDisplay] = useState<string | null>(() =>
+  const [fgDisplay, setFgDisplay] = useState<null | string>(() =>
     normalizeColorInput(init.fgRaw, init.fgColor),
   );
-  const [bgDisplay, setBgDisplay] = useState<string | null>(() =>
+  const [bgDisplay, setBgDisplay] = useState<null | string>(() =>
     normalizeColorInput(init.bgRaw, init.bgColor),
   );
 
@@ -56,9 +58,9 @@ export default function App() {
   const [permalinkCopied, setPermalinkCopied] = useState(false);
 
   const permalinkParams = new URLSearchParams({
-    fcolor: fgDisplay ?? fgColor.hex().slice(1),
-    bcolor: bgDisplay ?? bgColor.hex().slice(1),
     alpha: fgColor.alpha().toFixed(2),
+    bcolor: bgDisplay ?? bgColor.hex().slice(1),
+    fcolor: fgDisplay ?? fgColor.hex().slice(1),
   });
   const permalink = `${window.location.origin}${window.location.pathname}?${permalinkParams.toString()}`;
 
@@ -82,21 +84,21 @@ export default function App() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-sm mx-auto sm:max-w-none">
         <ColorPanel
-          id="fg-color"
-          title="Foreground"
           color={fgColor}
-          showAlpha
-          onChange={setFgColor}
           displayValue={fgDisplay ?? undefined}
+          id="fg-color"
+          onChange={setFgColor}
           onCommit={setFgDisplay}
+          showAlpha
+          title="Foreground"
         />
         <ColorPanel
-          id="bg-color"
-          title="Background"
           color={bgColor}
-          onChange={setBgColor}
           displayValue={bgDisplay ?? undefined}
+          id="bg-color"
+          onChange={setBgColor}
           onCommit={setBgDisplay}
+          title="Background"
         />
       </div>
 
@@ -109,17 +111,17 @@ export default function App() {
           </p>
         </div>
         <button
-          onClick={copyPermalink}
           className={cn(
             "text-sm text-primary-foreground cursor-pointer bg-transparent p-0 inline-flex gap-1.5 items-center",
             "border-b-2 border-double border-primary-foreground",
             "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent place-self-center",
           )}
+          onClick={copyPermalink}
         >
           {permalinkCopied ? (
             <>
               copied!
-              <Check size={12} className="text-success" />
+              <Check className="text-success" size={12} />
             </>
           ) : (
             <>
@@ -131,56 +133,56 @@ export default function App() {
       </div>
 
       <PreviewSection
+        bgCss={bgCss}
+        fgCss={fgCss}
         heading="Normal Text"
+        previewContent={
+          <p className="text-base leading-relaxed">{SAMPLE_TEXT}</p>
+        }
         wcagRows={[
           { label: "WCAG AA", pass: normalAA },
           { label: "WCAG AAA", pass: normalAAA },
         ]}
-        fgCss={fgCss}
-        bgCss={bgCss}
-        previewContent={
-          <p className="text-base leading-relaxed">{SAMPLE_TEXT}</p>
-        }
       />
 
       <PreviewSection
+        bgCss={bgCss}
+        fgCss={fgCss}
         heading="Large Text"
+        previewContent={
+          <p className="text-2xl font-bold leading-snug">{SAMPLE_TEXT}</p>
+        }
         wcagRows={[
           { label: "WCAG AA", pass: largeAA },
           { label: "WCAG AAA", pass: largeAAA },
         ]}
-        fgCss={fgCss}
-        bgCss={bgCss}
-        previewContent={
-          <p className="text-2xl font-bold leading-snug">{SAMPLE_TEXT}</p>
-        }
       />
 
       <PreviewSection
-        heading="Graphical Objects and User Interface Components"
-        wcagRows={[{ label: "WCAG AA", pass: graphicsAA }]}
-        fgCss={fgCss}
         bgCss={bgCss}
+        fgCss={fgCss}
+        heading="Graphical Objects and User Interface Components"
         previewContent={
           <div className="flex flex-col items-center gap-4">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="36"
+              aria-label="Star"
+              fill="currentColor"
               height="36"
               viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-label="Star"
+              width="36"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
             <input
-              type="text"
-              defaultValue="Text Input"
               className="rounded px-3 py-1.5 text-sm bg-background text-foreground"
+              defaultValue="Text Input"
               style={{ border: `2px solid ${fgCss}` }}
+              type="text"
             />
           </div>
         }
+        wcagRows={[{ label: "WCAG AA", pass: graphicsAA }]}
       />
 
       <footer className="text-sm text-muted-foreground bg-muted border rounded-lg p-4 mt-16">
@@ -193,8 +195,8 @@ export default function App() {
               "inline-flex gap-1.5 items-center",
             )}
             href="https://webaim.org/resources/contrastchecker/"
-            target="_blank"
             rel="noopener noreferrer"
+            target="_blank"
           >
             Contrast Checker
             <ExternalLink size={12} />

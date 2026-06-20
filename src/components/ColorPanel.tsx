@@ -1,39 +1,41 @@
+import Color, { type ColorInstance } from "color";
+import { AlertTriangle, ChevronsUp } from "lucide-react";
+import { useCallback, useState } from "react";
+
 import { Slider } from "@/components/ui/slider";
 import { normalizeColorInput } from "@/lib/color-format";
 import { parseColorInput } from "@/lib/color-parser";
 import { lightnessGradientFromColor } from "@/lib/color-utils";
-import Color, { type ColorInstance } from "color";
-import { AlertTriangle, ChevronsUp } from "lucide-react";
-import { useCallback, useState } from "react";
+
 import { ColorFormats } from "./ColorFormats";
 
 export interface ColorPanelProps {
-  id: string;
-  title: string;
   color: ColorInstance;
-  showAlpha?: boolean;
-  onChange: (color: ColorInstance) => void;
   /** Externally committed display string (the last format the user confirmed). */
   displayValue?: string;
+  id: string;
+  onChange: (color: ColorInstance) => void;
   /**
    * Called when the committed display string changes.
    * Pass `null` to signal that the format has been reset to the derived hex.
    */
-  onCommit?: (normalized: string | null) => void;
+  onCommit?: (normalized: null | string) => void;
+  showAlpha?: boolean;
+  title: string;
 }
 
 export function ColorPanel({
-  id,
-  title,
   color,
-  showAlpha = false,
-  onChange,
   displayValue,
+  id,
+  onChange,
   onCommit,
+  showAlpha = false,
+  title,
 }: ColorPanelProps) {
   // null = not editing (display derived/committed value), string = user is typing
-  const [rawInput, setRawInput] = useState<string | null>(null);
-  const [rawAlpha, setRawAlpha] = useState<string | null>(null);
+  const [rawInput, setRawInput] = useState<null | string>(null);
+  const [rawAlpha, setRawAlpha] = useState<null | string>(null);
   const [outOfGamut, setOutOfGamut] = useState(false);
 
   const alpha = color.alpha();
@@ -100,23 +102,23 @@ export function ColorPanel({
       <div>
         <label htmlFor={id}>Color Value</label>
         <input
-          id={id}
           className="w-full border rounded px-2 py-1.5 text-sm font-mono"
-          value={displayInput}
-          spellCheck={false}
+          id={id}
           maxLength={60}
-          onFocus={(e) => {
-            e.target.select();
+          onBlur={() => {
+            applyInput(displayInput);
           }}
           onChange={(e) => {
             setRawInput(e.target.value);
           }}
-          onBlur={() => {
-            applyInput(displayInput);
+          onFocus={(e) => {
+            e.target.select();
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") applyInput(displayInput);
           }}
+          spellCheck={false}
+          value={displayInput}
         />
       </div>
 
@@ -125,8 +127,8 @@ export function ColorPanel({
           <label htmlFor={`${id}-out-of-gamut`}>Color approximation</label>
           <div className="grid grid-cols-2 gap-2">
             <input
-              id={`${id}-out-of-gamut`}
               className="w-full border rounded px-2 py-1.5 text-sm font-mono"
+              id={`${id}-out-of-gamut`}
               value={color.hex()}
             />
             <button
@@ -140,7 +142,7 @@ export function ColorPanel({
             </button>
           </div>
           <div className="flex items-start gap-1.5 bg-warning border rounded p-2 text-sm text-warning-foreground leading-snug">
-            <AlertTriangle size={32} className="place-self-center mx-2" />
+            <AlertTriangle className="place-self-center mx-2" size={32} />
             <span>
               This color is outside sRGB. A close sRGB approximation is shown.
               WCAG contrast is calculated on the sRGB version.
@@ -155,14 +157,14 @@ export function ColorPanel({
             Color Picker
           </p>
           <input
-            type="color"
-            value={pickerHex}
             className="w-full h-10 cursor-pointer rounded border p-0.5"
             onChange={(e) => {
               const picked = Color(e.target.value);
               onChange(showAlpha ? picked.alpha(alpha) : picked);
               onCommit?.(null);
             }}
+            type="color"
+            value={pickerHex}
           />
         </div>
         {showAlpha && (
@@ -172,16 +174,16 @@ export function ColorPanel({
             </p>
             <input
               className="w-full h-10 border rounded px-2 py-1.5 text-sm text-center"
-              value={displayAlpha}
-              onChange={(e) => {
-                setRawAlpha(e.target.value);
-              }}
               onBlur={() => {
                 applyAlpha(displayAlpha);
+              }}
+              onChange={(e) => {
+                setRawAlpha(e.target.value);
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") applyAlpha(displayAlpha);
               }}
+              value={displayAlpha}
             />
           </div>
         )}
@@ -202,15 +204,15 @@ export function ColorPanel({
             />
           </div>
           <Slider
-            value={[lightness]}
-            min={0}
             max={100}
-            step={0.1}
+            min={0}
             onValueChange={(value) => {
               handleLightnessChange(
                 typeof value === "number" ? value : value[0],
               );
             }}
+            step={0.1}
+            value={[lightness]}
           />
         </div>
       </div>

@@ -1,3 +1,12 @@
+export function WcagRow({ label, pass }: { label: string; pass: boolean }) {
+  return (
+    <div className="flex justify-between sm:justify-start items-center gap-3">
+      <span className="text-sm font-medium w-24 shrink-0">{label}</span>
+      <Badge pass={pass} />
+    </div>
+  );
+}
+
 function Badge({ pass }: { pass: boolean }) {
   return (
     <span
@@ -7,14 +16,5 @@ function Badge({ pass }: { pass: boolean }) {
     >
       {pass ? "Pass" : "Fail"}
     </span>
-  );
-}
-
-export function WcagRow({ label, pass }: { label: string; pass: boolean }) {
-  return (
-    <div className="flex justify-between sm:justify-start items-center gap-3">
-      <span className="text-sm font-medium w-24 shrink-0">{label}</span>
-      <Badge pass={pass} />
-    </div>
   );
 }
