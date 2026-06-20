@@ -9,7 +9,11 @@ import {
 } from "preact/hooks";
 
 import { normalizeColorInput } from "@/lib/color-format";
-import { colorToCss, compositeAlpha } from "@/lib/color-utils";
+import {
+  colorToCss,
+  compositeAlpha,
+  generateAAAColorPair,
+} from "@/lib/color-utils";
 import { readUrlParams } from "@/lib/url-params";
 
 import { ColorPanel } from "./components/ColorPanel";
@@ -21,17 +25,47 @@ const SAMPLE_TEXT =
 
 export default function App() {
   const init = useMemo(() => readUrlParams(), []);
-  const [fgColor, setFgColor] = useState<ColorInstance>(init.fgColor);
-  const [bgColor, setBgColor] = useState<ColorInstance>(init.bgColor);
+
+  // When no URL params are present, generate a random AAA-passing pair once
+  // and push it to the history stack so the clean URL remains navigable.
+  const [initialState] = useState<{
+    bgColor: ColorInstance;
+    bgDisplay: null | string;
+    fgColor: ColorInstance;
+    fgDisplay: null | string;
+    pushOnMount: boolean;
+  }>(() => {
+    const hasParams = new URLSearchParams(window.location.search).has("fcolor");
+    if (hasParams) {
+      return {
+        bgColor: init.bgColor,
+        bgDisplay: normalizeColorInput(init.bgRaw, init.bgColor),
+        fgColor: init.fgColor,
+        fgDisplay: normalizeColorInput(init.fgRaw, init.fgColor),
+        pushOnMount: false,
+      };
+    }
+    const pair = generateAAAColorPair();
+    return {
+      bgColor: pair.bg,
+      bgDisplay: null,
+      fgColor: pair.fg,
+      fgDisplay: null,
+      pushOnMount: true,
+    };
+  });
+
+  const [fgColor, setFgColor] = useState<ColorInstance>(initialState.fgColor);
+  const [bgColor, setBgColor] = useState<ColorInstance>(initialState.bgColor);
   // The format string the user last confirmed for each panel (null = derived hex)
-  const [fgDisplay, setFgDisplay] = useState<null | string>(() =>
-    normalizeColorInput(init.fgRaw, init.fgColor),
+  const [fgDisplay, setFgDisplay] = useState<null | string>(
+    initialState.fgDisplay,
   );
-  const [bgDisplay, setBgDisplay] = useState<null | string>(() =>
-    normalizeColorInput(init.bgRaw, init.bgColor),
+  const [bgDisplay, setBgDisplay] = useState<null | string>(
+    initialState.bgDisplay,
   );
 
-  const pushNeededRef = useRef(false);
+  const pushNeededRef = useRef(initialState.pushOnMount);
   const sliderTimerRef = useRef<null | ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {

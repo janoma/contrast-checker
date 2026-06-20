@@ -28,6 +28,39 @@ export function compositeAlpha(
   );
 }
 
+/**
+ * Generate a random fg/bg color pair that passes WCAG AAA (contrast >= 7).
+ * Uses the HSL lightness split strategy: either a dark bg with a light fg,
+ * or a light bg with a dark fg, with randomized hues and saturations.
+ */
+export function generateAAAColorPair(): {
+  bg: ColorInstance;
+  fg: ColorInstance;
+} {
+  for (let i = 0; i < 200; i++) {
+    const darkBg = Math.random() < 0.5;
+    const bgHue = Math.random() * 360;
+    const fgHue = Math.random() * 360;
+    const bgSat = 15 + Math.random() * 60;
+    const fgSat = 15 + Math.random() * 60;
+    const bgLight = darkBg ? 5 + Math.random() * 25 : 70 + Math.random() * 25;
+    const fgLight = darkBg ? 80 + Math.random() * 18 : 2 + Math.random() * 18;
+
+    const bg = Color.hsl(bgHue, bgSat, bgLight);
+    const fg = Color.hsl(fgHue, fgSat, fgLight);
+
+    try {
+      if (fg.contrast(bg) >= 7) {
+        return { bg, fg };
+      }
+    } catch {
+      // try again
+    }
+  }
+
+  return { bg: Color("#FFFFFF"), fg: Color("#000000") };
+}
+
 /** HSL-based gradient for the lightness slider track. */
 export function lightnessGradientFromColor(c: ColorInstance): string {
   try {
