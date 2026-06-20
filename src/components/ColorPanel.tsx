@@ -1,11 +1,12 @@
 import Color, { type ColorInstance } from "color";
 import { AlertTriangle, ChevronsUp } from "lucide-react";
-import { useCallback, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 
 import { Slider } from "@/components/ui/slider";
 import { normalizeColorInput } from "@/lib/color-format";
 import { parseColorInput } from "@/lib/color-parser";
 import { lightnessGradientFromColor } from "@/lib/color-utils";
+import { cn } from "@/lib/utils";
 
 import { ColorFormats } from "./ColorFormats";
 
@@ -13,6 +14,7 @@ export interface ColorPanelProps {
   color: ColorInstance;
   /** Externally committed display string (the last format the user confirmed). */
   displayValue?: string;
+  hotkey: string;
   id: string;
   onChange: (color: ColorInstance) => void;
   /**
@@ -27,6 +29,7 @@ export interface ColorPanelProps {
 export function ColorPanel({
   color,
   displayValue,
+  hotkey,
   id,
   onChange,
   onCommit,
@@ -47,6 +50,16 @@ export function ColorPanel({
       : color.hex().toUpperCase());
   const displayInput = rawInput ?? derivedDisplay;
   const displayAlpha = rawAlpha ?? alpha.toFixed(2);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === hotkey) {
+        e.preventDefault();
+        document.getElementById(id)?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+  }, [hotkey, displayInput, id]);
 
   const applyInput = useCallback(
     (val: string) => {
@@ -101,27 +114,39 @@ export function ColorPanel({
 
       <div>
         <label htmlFor={id}>Color Value</label>
-        <input
-          className="w-full border rounded px-2 py-1.5 text-sm font-mono"
-          id={id}
-          maxLength={60}
-          onBlur={() => {
-            applyInput(displayInput);
-          }}
-          onChange={(e) => {
-            setRawInput(e.target.value);
-          }}
-          onFocus={(e) => {
-            e.target.select();
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
+        <div className="flex items-center gap-2">
+          <span
+            className={cn(
+              "text-xs font-mono uppercase font-semibold text-muted-foreground border border-b-2 shadow",
+              "p-0.5 aspect-square size-6 inline-flex items-center justify-center",
+              "hover:shadow-xs hover:bg-muted/50",
+            )}
+          >
+            {hotkey}
+          </span>
+          <input
+            className="w-full border rounded px-2 py-1.5 text-sm font-mono"
+            id={id}
+            maxLength={60}
+            onBlur={() => {
               applyInput(displayInput);
-            }
-          }}
-          spellCheck={false}
-          value={displayInput}
-        />
+            }}
+            onChange={(e) => {
+              setRawInput(e.target.value);
+            }}
+            onFocus={(e) => {
+              e.target.select();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                applyInput(displayInput);
+              }
+              e.stopPropagation();
+            }}
+            spellCheck={false}
+            value={displayInput}
+          />
+        </div>
       </div>
 
       {outOfGamut && (

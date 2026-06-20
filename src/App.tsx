@@ -81,7 +81,7 @@ export default function App() {
       </div>
       <header className="mb-4">
         <h1>Contrast Checker</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-sm mt-1">
           WCAG 2.0 and 2.1 contrast ratio calculator. Based on the{" "}
           <a
             className={cn(
@@ -104,6 +104,7 @@ export default function App() {
           <ColorPanel
             color={fgColor}
             displayValue={fgDisplay ?? undefined}
+            hotkey="f"
             id="fg-color"
             onChange={setFgColor}
             onCommit={setFgDisplay}
@@ -113,6 +114,7 @@ export default function App() {
           <ColorPanel
             color={bgColor}
             displayValue={bgDisplay ?? undefined}
+            hotkey="b"
             id="bg-color"
             onChange={setBgColor}
             onCommit={setBgDisplay}
@@ -196,6 +198,9 @@ export default function App() {
                 aria-label="Text Input"
                 className="rounded px-3 py-1.5 text-sm bg-background text-foreground"
                 defaultValue="Text Input"
+                onKeyDown={(e) => {
+                  e.stopPropagation();
+                }}
                 style={{ border: `2px solid ${fgCss}` }}
                 type="text"
               />
@@ -205,7 +210,7 @@ export default function App() {
         />
       </main>
 
-      <footer className="text-sm text-muted-foreground bg-muted border rounded-lg p-4 mt-16">
+      <footer className="text-sm bg-muted border rounded-lg p-4 mt-16">
         <h2>Nerdy references</h2>
         <p>
           Mozilla Developer Network has good documentation on various color

@@ -34,7 +34,7 @@
   --primary: oklch(93.2% 0.032 255.585); /* blue-100 */
   --primary-foreground: oklch(48.8% 0.243 264.376); /* blue-700 */
   --muted: var(--color-taupe-100);
-  --muted-foreground: var(--color-taupe-700);
+  --muted-foreground: var(--color-taupe-500);
   --accent: var(--color-yellow-100);
   --accent-foreground: var(--color-yellow-800);
   --destructive: oklch(57.7% 0.245 27.325); /* red-600 */
@@ -86,13 +86,13 @@
     @apply font-heading text-3xl font-bold;
   }
   h2 {
-    @apply font-semibold tracking-wider uppercase text-accent-foreground;
+    @apply text-lg font-semibold tracking-wider uppercase text-accent-foreground;
   }
   h2.example {
     @apply font-heading text-2xl normal-case font-bold border-b border-red-200 pb-1;
   }
   label {
-    @apply text-sm text-muted-foreground text-center;
+    @apply text-sm text-foreground text-center;
   }
   button.replace {
     @apply text-sm bg-muted text-muted-foreground border rounded inline-flex gap-1.5 items-center justify-center;

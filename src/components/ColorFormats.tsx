@@ -81,7 +81,7 @@ function FormatRow({
 }) {
   return (
     <div className="flex items-center gap-2 py-1.5 border-b last:border-b-0">
-      <span className="text-sm font-light text-muted-foreground w-14 shrink-0 uppercase tracking-wide">
+      <span className="text-sm text-muted-foreground w-14 shrink-0 uppercase tracking-wide">
         {label}
       </span>
       <span className="flex-1 font-mono text-xs xs:text-sm text-foreground break-all leading-relaxed min-h-6">
