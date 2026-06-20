@@ -242,10 +242,10 @@ export default function App() {
         <div className="flex flex-col items-stretch sm:items-center gap-2 max-w-sm mx-auto sm:max-w-none">
           <div className="border rounded-xl px-12 py-5 text-center bg-background">
             <h2>{LL.contrastRatio()}</h2>
-            <p className="text-6xl font-bold tracking-tight leading-none">
+            <output className="text-6xl font-bold tracking-tight leading-none">
               {contrastRatio.toFixed(2)}
               <span className="font-normal text-muted-foreground">:1</span>
-            </p>
+            </output>
           </div>
           <button
             className={cn(
