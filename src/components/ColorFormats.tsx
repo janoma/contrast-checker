@@ -1,6 +1,6 @@
 import { type ColorInstance } from "color";
 import { ChevronDown } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   formatHex,
@@ -17,8 +17,20 @@ import { cn } from "@/lib/utils";
 
 import CopyButton from "./ui/copy-button";
 
-export function ColorFormats({ color }: { color: ColorInstance }) {
-  const [open, setOpen] = useState(false);
+export function ColorFormats({
+  color,
+  id,
+}: {
+  color: ColorInstance;
+  id: string;
+}) {
+  const [open, setOpen] = useState(
+    () => localStorage.getItem(`color-formats-open-${id}`) === "true",
+  );
+
+  useEffect(() => {
+    localStorage.setItem(`color-formats-open-${id}`, String(open));
+  }, [open, id]);
 
   const formats = useMemo(
     () => [

@@ -217,7 +217,7 @@ export function ColorPanel({
         </div>
       </div>
 
-      <ColorFormats color={color} />
+      <ColorFormats color={color} id={id} />
     </div>
   );
 }
