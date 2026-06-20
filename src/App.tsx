@@ -217,7 +217,7 @@ export default function App() {
           <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/hex-color">
             Hex
           </a>{" "}
-          (for the <em>hexadecimal</em> color representation),
+          (for the <em>hexadecimal</em> color representation),{" "}
           <a href="https://developer.mozilla.org/en-US/docs/Glossary/Color_space">
             Color Space
           </a>
