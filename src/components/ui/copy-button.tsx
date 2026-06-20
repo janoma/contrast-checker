@@ -22,7 +22,7 @@ export default function CopyButton({
 
   return (
     <button
-      className="shrink-0 rounded hover:bg-taupe-100 text-taupe-400 hover:text-taupe-600 transition-colors inline-flex items-center gap-1 px-1.5 py-0"
+      className="shrink-0 rounded hover:bg-muted text-muted-foreground transition-colors inline-flex items-center gap-1 px-1.5 py-0 aspect-square"
       onClick={copy}
       title={`Copy ${text}`}
     >
