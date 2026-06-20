@@ -97,7 +97,7 @@ export function ColorPanel({
 
   return (
     <div className="border rounded-lg p-4 space-y-3 bg-background">
-      <h2>{title}</h2>
+      <h2 className="text-center">{title}</h2>
 
       <div>
         <label htmlFor={id}>Color Value</label>

@@ -74,7 +74,15 @@ export default function App() {
 
   return (
     <div className="lg:max-w-[calc(var(--container-5xl)-4rem)] lg:mx-auto lg:border lg:rounded-lg p-3 sm:p-6 lg:my-8 bg-taupe-50">
-      <header>
+      <div className="sr-only focus-within:not-sr-only flex justify-center">
+        <a
+          className="py-2 px-4 text-center border-2 rounded border-accent-foreground bg-accent text-accent-foreground"
+          href="#main-content"
+        >
+          Skip to main content
+        </a>
+      </div>
+      <header className="mb-4">
         <h1>Contrast Checker</h1>
         <p className="text-sm text-muted-foreground mt-1">
           WCAG 2.0 and 2.1 contrast ratio calculator. Accepts HEX, RGB, HSL,
@@ -82,7 +90,7 @@ export default function App() {
         </p>
       </header>
 
-      <main className="space-y-8 my-8" id="main-content">
+      <main className="space-y-8 pt-4" id="main-content">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-sm mx-auto sm:max-w-none">
           <ColorPanel
             color={fgColor}
@@ -195,7 +203,8 @@ export default function App() {
             className={cn(
               "border-b-2 border-double border-primary-foreground text-primary-foreground",
               "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent",
-              "inline-flex gap-1.5 items-center",
+              "focus:text-accent-foreground focus:border-accent-foreground focus:bg-accent",
+              "inline-flex gap-1.5 items-center outline-0 outline-offset-0",
             )}
             href="https://webaim.org/resources/contrastchecker/"
             rel="noopener noreferrer"
