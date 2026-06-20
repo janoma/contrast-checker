@@ -198,7 +198,9 @@ export function formatName(c: ColorInstance): [string, string] | string {
   if (c.alpha() === 0 && c.red() === 0 && c.green() === 0 && c.blue() === 0) {
     return "transparent";
   }
-  if (c.alpha() < 1) return "";
+  if (c.alpha() < 1) {
+    return "";
+  }
   return CSS_NAMED_COLORS[c.hex().toUpperCase()] ?? "";
 }
 
@@ -240,15 +242,31 @@ export function normalizeColorInput(
   raw: unknown,
   color: ColorInstance,
 ): string {
-  if (typeof raw !== "string") return formatHex(color);
+  if (typeof raw !== "string") {
+    return formatHex(color);
+  }
   const sl = raw.trim().toLowerCase();
-  if (sl.startsWith("oklch(")) return formatOklch(color);
-  if (sl.startsWith("oklab(")) return formatOklab(color);
-  if (sl.startsWith("lch(")) return formatLch(color);
-  if (sl.startsWith("lab(")) return formatLab(color);
-  if (sl.startsWith("hsl")) return formatHsl(color); // hsl( and hsla(
-  if (sl.startsWith("hwb(")) return formatHwb(color);
-  if (sl.startsWith("rgb")) return formatRgb(color); // rgb( and rgba(
+  if (sl.startsWith("oklch(")) {
+    return formatOklch(color);
+  }
+  if (sl.startsWith("oklab(")) {
+    return formatOklab(color);
+  }
+  if (sl.startsWith("lch(")) {
+    return formatLch(color);
+  }
+  if (sl.startsWith("lab(")) {
+    return formatLab(color);
+  }
+  if (sl.startsWith("hsl")) {
+    return formatHsl(color);
+  } // hsl( and hsla(
+  if (sl.startsWith("hwb(")) {
+    return formatHwb(color);
+  }
+  if (sl.startsWith("rgb")) {
+    return formatRgb(color);
+  } // rgb( and rgba(
   return formatHex(color); // hex (with or without #) and named keywords
 }
 

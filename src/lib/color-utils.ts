@@ -18,7 +18,9 @@ export function compositeAlpha(
   bg: ColorInstance,
 ): ColorInstance {
   const a = fg.alpha();
-  if (a >= 1) return fg;
+  if (a >= 1) {
+    return fg;
+  }
   return Color.rgb(
     fg.red() * a + bg.red() * (1 - a),
     fg.green() * a + bg.green() * (1 - a),

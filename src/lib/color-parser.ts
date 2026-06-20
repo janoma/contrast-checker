@@ -21,7 +21,9 @@ export type ParseResult = { color: ColorInstance; outOfGamut: boolean };
  */
 export function parseColorInput(input: string): null | ParseResult {
   const s = input.trim();
-  if (!s) return null;
+  if (!s) {
+    return null;
+  }
 
   // 1. Hex (with or without #, 3/6/8 digits)
   const hexRaw = s.startsWith("#") ? s.slice(1) : s;
@@ -138,14 +140,20 @@ function extractCssFnArgs(
     "i",
   );
   const m = input.trim().match(modernRe) ?? input.trim().match(legacyRe);
-  if (!m) return null;
+  if (!m) {
+    return null;
+  }
   return [m[1], m[2], m[3], m[4]];
 }
 
 /** Parse a CSS channel value: handles %, "none", and bare numbers. */
 function parseCssChannel(s: string, percentScale = 1): number {
   const t = s.trim();
-  if (t === "none") return 0;
-  if (t.endsWith("%")) return (parseFloat(t) / 100) * percentScale;
+  if (t === "none") {
+    return 0;
+  }
+  if (t.endsWith("%")) {
+    return (parseFloat(t) / 100) * percentScale;
+  }
   return parseFloat(t);
 }

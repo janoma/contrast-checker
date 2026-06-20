@@ -115,7 +115,9 @@ export function ColorPanel({
             e.target.select();
           }}
           onKeyDown={(e) => {
-            if (e.key === "Enter") applyInput(displayInput);
+            if (e.key === "Enter") {
+              applyInput(displayInput);
+            }
           }}
           spellCheck={false}
           value={displayInput}
@@ -179,7 +181,9 @@ export function ColorPanel({
                 setRawAlpha(e.target.value);
               }}
               onKeyDown={(e) => {
-                if (e.key === "Enter") applyAlpha(displayAlpha);
+                if (e.key === "Enter") {
+                  applyAlpha(displayAlpha);
+                }
               }}
               value={displayAlpha}
             />

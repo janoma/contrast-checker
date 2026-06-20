@@ -24,5 +24,8 @@ export default defineConfig([
         projectService: true,
       },
     },
+    rules: {
+      curly: "error",
+    },
   },
 ]);
