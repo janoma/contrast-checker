@@ -4,6 +4,7 @@ import { lightnessGradientFromColor } from "@/lib/color-utils";
 import Color, { type ColorInstance } from "color";
 import { useCallback, useState } from "react";
 import { ColorFormats } from "./ColorFormats";
+import { AlertTriangle } from "lucide-react";
 
 export interface ColorPanelProps {
   title: string;
@@ -75,10 +76,8 @@ export function ColorPanel({
   const pickerHex = color.hex();
 
   return (
-    <div className="border rounded-lg p-4 space-y-3 bg-white">
-      <h2 className="text-center font-semibold text-sm uppercase tracking-wide text-gray-600">
-        {title}
-      </h2>
+    <div className="border rounded-lg p-4 space-y-3 bg-background">
+      <h2>{title}</h2>
 
       <div>
         <p className="text-sm text-muted-foreground text-center mb-1">
@@ -104,8 +103,8 @@ export function ColorPanel({
       </div>
 
       {outOfGamut && (
-        <div className="flex items-start gap-1.5 bg-amber-50 border border-amber-200 rounded p-2 text-sm text-amber-800 leading-snug">
-          <span className="shrink-0 mt-px">⚠</span>
+        <div className="flex items-start gap-1.5 bg-warning border rounded p-2 text-sm text-warning-foreground leading-snug">
+          <AlertTriangle size={32} className="place-self-center mx-2" />
           <span>
             This color is outside sRGB. The closest sRGB approximation is shown.
             WCAG contrast is calculated on the sRGB version.

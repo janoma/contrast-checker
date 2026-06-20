@@ -17,7 +17,7 @@ export function PreviewSection({
 }: PreviewSectionProps) {
   return (
     <section className="space-y-3">
-      <h2 className="font-heading text-xl font-bold text-red-700 border-b border-red-200 pb-1">
+      <h2 className="example">
         {heading}
       </h2>
       <div className="flex flex-col sm:flex-row items-stretch gap-3 sm:gap-6">

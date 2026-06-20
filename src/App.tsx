@@ -58,9 +58,9 @@ export default function App() {
   }, [permalink]);
 
   return (
-    <div className="lg:max-w-[calc(var(--container-5xl)-4rem)] lg:mx-auto lg:border lg:rounded-lg p-3 sm:p-6 lg:my-8 bg-gray-50 space-y-8">
+    <div className="lg:max-w-[calc(var(--container-5xl)-4rem)] lg:mx-auto lg:border lg:rounded-lg p-3 sm:p-6 lg:my-8 bg-taupe-50 space-y-8">
       <header>
-        <h1 className="font-heading text-3xl font-bold">Contrast Checker</h1>
+        <h1>Contrast Checker</h1>
         <p className="text-sm text-muted-foreground mt-1">
           WCAG 2.0 and 2.1 contrast ratio calculator. Accepts HEX, RGB, HSL,
           HWB, OKLCH, OKLAB, LCH, and LAB color formats.
@@ -98,7 +98,7 @@ export default function App() {
           {permalinkCopied ? (
             <>
               copied!
-              <Check size={12} className="text-green-600" />
+              <Check size={12} className="text-success" />
             </>
           ) : (
             <>
@@ -178,7 +178,7 @@ export default function App() {
             Contrast Checker
             <ExternalLink size={12} />
           </a>{" "}
-          by WebAIM, with added support for more color formats.
+          tool by WebAIM, with added support for more color formats.
         </p>
       </footer>
     </div>

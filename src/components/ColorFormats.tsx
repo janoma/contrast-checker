@@ -34,10 +34,10 @@ function FormatRow({ label, value }: { label: string; value: string }) {
       <button
         onClick={copy}
         title={`Copy ${label}`}
-        className="shrink-0 p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+        className="shrink-0 p-1 rounded hover:bg-taupe-100 text-taupe-400 hover:text-taupe-600 transition-colors"
       >
         {copied ? (
-          <Check size={12} className="text-green-500" />
+          <Check size={12} className="text-success" />
         ) : (
           <Copy size={12} />
         )}
@@ -75,7 +75,7 @@ export function ColorFormats({ color }: { color: ColorInstance }) {
         <span className="select-none">{open ? "▴" : "▾"}</span>
       </button>
       {open && (
-        <div className="mt-2 border rounded-md bg-gray-50 px-2 pb-1 pt-0.5">
+        <div className="mt-2 border rounded-md bg-muted/50 px-2 pb-1 pt-0.5">
           {formats.map((f) => (
             <FormatRow key={f.label} label={f.label} value={f.value} />
           ))}

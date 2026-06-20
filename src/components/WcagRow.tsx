@@ -2,7 +2,7 @@ function Badge({ pass }: { pass: boolean }) {
   return (
     <span
       className={`inline-flex items-center px-3 py-0.5 rounded-full text-sm font-bold tracking-wide text-white ${
-        pass ? "bg-green-600" : "bg-red-600"
+        pass ? "bg-success" : "bg-failure"
       }`}
     >
       {pass ? "Pass" : "Fail"}
