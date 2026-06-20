@@ -1,5 +1,5 @@
 import { type ColorInstance } from "color";
-import { Check, Copy, ExternalLink } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 
 import { normalizeColorInput } from "@/lib/color-format";
@@ -75,18 +75,27 @@ export default function App() {
   return (
     <div className="lg:max-w-[calc(var(--container-5xl)-4rem)] lg:mx-auto lg:border lg:rounded-lg p-3 sm:p-6 lg:my-8 bg-taupe-50">
       <div className="sr-only focus-within:not-sr-only flex justify-center">
-        <a
-          className="py-2 px-4 text-center border-2 rounded border-accent-foreground bg-accent text-accent-foreground"
-          href="#main-content"
-        >
+        <a className="py-2 px-4 border-0" href="#main-content">
           Skip to main content
         </a>
       </div>
       <header className="mb-4">
         <h1>Contrast Checker</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          WCAG 2.0 and 2.1 contrast ratio calculator. Accepts HEX, RGB, HSL,
-          HWB, OKLCH, OKLAB, LCH, and LAB color formats.
+          WCAG 2.0 and 2.1 contrast ratio calculator. Based on the{" "}
+          <a
+            className={cn(
+              "border-b-2 border-double border-primary-foreground text-primary-foreground",
+              "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent",
+              "focus:text-accent-foreground focus:border-accent-foreground focus:bg-accent",
+              "outline-0 outline-offset-0",
+            )}
+            href="https://webaim.org/resources/contrastchecker/"
+          >
+            Contrast Checker
+          </a>{" "}
+          tool by WebAIM, with support for more color formats. Accepts HEX, RGB,
+          HSL, HWB, OKLCH, OKLAB, LCH, and LAB.
         </p>
       </header>
 
@@ -197,23 +206,54 @@ export default function App() {
       </main>
 
       <footer className="text-sm text-muted-foreground bg-muted border rounded-lg p-4 mt-16">
+        <h2>Nerdy references</h2>
         <p>
-          Based on the{" "}
-          <a
-            className={cn(
-              "border-b-2 border-double border-primary-foreground text-primary-foreground",
-              "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent",
-              "focus:text-accent-foreground focus:border-accent-foreground focus:bg-accent",
-              "inline-flex gap-1.5 items-center outline-0 outline-offset-0",
-            )}
-            href="https://webaim.org/resources/contrastchecker/"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Contrast Checker
-            <ExternalLink size={12} />
+          Mozilla Developer Network has good documentation on various color
+          topics:{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Glossary/RGB">
+            RGB color model
+          </a>
+          ,{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/hex-color">
+            Hex
           </a>{" "}
-          tool by WebAIM, with added support for more color formats.
+          (for the <em>hexadecimal</em> color representation),
+          <a href="https://developer.mozilla.org/en-US/docs/Glossary/Color_space">
+            Color Space
+          </a>
+          ,{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Glossary/Gamut">
+            Gamut
+          </a>
+          , and the various CSS color functions:{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/rgb">
+            RGB
+          </a>
+          ,{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/hsl">
+            HSL
+          </a>
+          ,{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/hwb">
+            HWB
+          </a>
+          ,{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklch">
+            OKLCH
+          </a>
+          ,{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/oklab">
+            OKLAB
+          </a>
+          ,{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/lch">
+            LCH
+          </a>
+          , and{" "}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/lab">
+            LAB
+          </a>
+          .
         </p>
       </footer>
     </div>

@@ -97,6 +97,9 @@
   button.replace {
     @apply text-sm bg-muted text-muted-foreground border rounded inline-flex gap-1.5 items-center justify-center;
   }
+  a {
+    @apply border-b-2 border-double border-primary-foreground text-primary-foreground hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent focus:text-accent-foreground focus:border-accent-foreground focus:bg-accent inline-flex gap-1.5 items-center outline-0 outline-offset-0;
+  }
 }
 
 .range-slider {
