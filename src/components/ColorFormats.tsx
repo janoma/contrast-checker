@@ -72,7 +72,7 @@ function FormatRow({
       <span className="text-sm font-light text-muted-foreground w-14 shrink-0 uppercase tracking-wide">
         {label}
       </span>
-      <span className="flex-1 font-mono text-sm text-foreground break-all leading-relaxed min-h-6">
+      <span className="flex-1 font-mono text-xs xs:text-sm text-foreground break-all leading-relaxed min-h-6">
         {typeof value === "string" ? (
           value
         ) : (

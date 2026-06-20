@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  --breakpoint-xs: 30rem;
+
   --color-orange-*: initial;
   --color-amber-*: initial;
   --color-lime-*: initial;
