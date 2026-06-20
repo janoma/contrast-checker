@@ -1,6 +1,6 @@
 import { type ColorInstance } from "color";
-import { Check, Copy } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { useMemo, useState } from "react";
 
 import {
   formatHex,
@@ -8,16 +8,21 @@ import {
   formatHwb,
   formatLab,
   formatLch,
+  formatName,
   formatOklab,
   formatOklch,
   formatRgb,
 } from "@/lib/color-format";
+import { cn } from "@/lib/utils";
+
+import CopyButton from "./ui/copy-button";
 
 export function ColorFormats({ color }: { color: ColorInstance }) {
   const [open, setOpen] = useState(false);
 
   const formats = useMemo(
     () => [
+      { label: "Name", value: formatName(color) },
       { label: "HEX", value: formatHex(color) },
       { label: "RGB", value: formatRgb(color) },
       { label: "HSL", value: formatHsl(color) },
@@ -39,7 +44,10 @@ export function ColorFormats({ color }: { color: ColorInstance }) {
         }}
       >
         <span>Color formats</span>
-        <span className="select-none">{open ? "▴" : "▾"}</span>
+        <ChevronDown
+          className={cn("transition-transform", open ? "rotate-180" : "")}
+          size={14}
+        />
       </button>
       {open && (
         <div className="mt-2 border rounded-md bg-muted/50 px-2 pb-1 pt-0.5">
@@ -52,36 +60,29 @@ export function ColorFormats({ color }: { color: ColorInstance }) {
   );
 }
 
-function FormatRow({ label, value }: { label: string; value: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const copy = useCallback(() => {
-    void navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 1800);
-  }, [value]);
-
+function FormatRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: [string, string] | string;
+}) {
   return (
     <div className="flex items-center gap-2 py-1.5 border-b last:border-b-0">
       <span className="text-sm font-light text-muted-foreground w-14 shrink-0 uppercase tracking-wide">
         {label}
       </span>
-      <span className="flex-1 font-mono text-sm text-foreground break-all leading-relaxed">
-        {value}
-      </span>
-      <button
-        className="shrink-0 p-1 rounded hover:bg-taupe-100 text-taupe-400 hover:text-taupe-600 transition-colors"
-        onClick={copy}
-        title={`Copy ${label}`}
-      >
-        {copied ? (
-          <Check className="text-success" size={12} />
+      <span className="flex-1 font-mono text-sm text-foreground break-all leading-relaxed min-h-6">
+        {typeof value === "string" ? (
+          value
         ) : (
-          <Copy size={12} />
+          <>
+            <CopyButton className="text-foreground" show text={value[0]} /> or{" "}
+            <CopyButton className="text-foreground" show text={value[1]} />
+          </>
         )}
-      </button>
+      </span>
+      {typeof value === "string" && !!value && <CopyButton text={value} />}
     </div>
   );
 }
