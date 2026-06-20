@@ -1,5 +1,5 @@
 import { Check, Copy } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useState } from "preact/hooks";
 
 export default function CopyButton({
   className,

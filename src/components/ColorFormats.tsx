@@ -1,6 +1,6 @@
 import { type ColorInstance } from "color";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "preact/hooks";
 
 import {
   formatHex,

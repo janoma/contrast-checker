@@ -1,6 +1,6 @@
 import { type ColorInstance } from "color";
 import { Check, Copy, ExternalLink } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 
 import { normalizeColorInput } from "@/lib/color-format";
 import { colorToCss, compositeAlpha } from "@/lib/color-utils";

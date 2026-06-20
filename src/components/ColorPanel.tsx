@@ -1,6 +1,6 @@
 import Color, { type ColorInstance } from "color";
 import { AlertTriangle, ChevronsUp } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useState } from "preact/hooks";
 
 import { Slider } from "@/components/ui/slider";
 import { normalizeColorInput } from "@/lib/color-format";
