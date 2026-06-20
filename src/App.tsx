@@ -1,6 +1,12 @@
 import { type ColorInstance } from "color";
 import { Check, Copy } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "preact/hooks";
 
 import { normalizeColorInput } from "@/lib/color-format";
 import { colorToCss, compositeAlpha } from "@/lib/color-utils";
@@ -25,13 +31,49 @@ export default function App() {
     normalizeColorInput(init.bgRaw, init.bgColor),
   );
 
+  const pushNeededRef = useRef(false);
+  const sliderTimerRef = useRef<null | ReturnType<typeof setTimeout>>(null);
+
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set("fcolor", fgDisplay ?? fgColor.hex().slice(1));
     url.searchParams.set("bcolor", bgDisplay ?? bgColor.hex().slice(1));
     url.searchParams.set("alpha", fgColor.alpha().toFixed(2));
-    window.history.replaceState(null, "", url.toString());
+    if (pushNeededRef.current) {
+      window.history.pushState(null, "", url.toString());
+      pushNeededRef.current = false;
+    } else {
+      window.history.replaceState(null, "", url.toString());
+    }
   }, [fgColor, bgColor, fgDisplay, bgDisplay]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = readUrlParams();
+      setFgColor(params.fgColor);
+      setBgColor(params.bgColor);
+      setFgDisplay(normalizeColorInput(params.fgRaw, params.fgColor));
+      setBgDisplay(normalizeColorInput(params.bgRaw, params.bgColor));
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
+  const handleHistoryPush = useCallback(() => {
+    pushNeededRef.current = true;
+  }, []);
+
+  const handleSliderChange = useCallback(() => {
+    if (sliderTimerRef.current !== null) {
+      clearTimeout(sliderTimerRef.current);
+    }
+    sliderTimerRef.current = setTimeout(() => {
+      window.history.pushState(null, "", window.location.href);
+      sliderTimerRef.current = null;
+    }, 500);
+  }, []);
 
   const effectiveFg = useMemo(
     () => compositeAlpha(fgColor, bgColor),
@@ -108,6 +150,8 @@ export default function App() {
             id="fg-color"
             onChange={setFgColor}
             onCommit={setFgDisplay}
+            onHistoryPush={handleHistoryPush}
+            onSliderChange={handleSliderChange}
             showAlpha
             title="Foreground"
           />
@@ -118,6 +162,8 @@ export default function App() {
             id="bg-color"
             onChange={setBgColor}
             onCommit={setBgDisplay}
+            onHistoryPush={handleHistoryPush}
+            onSliderChange={handleSliderChange}
             title="Background"
           />
         </div>

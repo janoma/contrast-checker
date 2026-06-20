@@ -22,6 +22,10 @@ export interface ColorPanelProps {
    * Pass `null` to signal that the format has been reset to the derived hex.
    */
   onCommit?: (normalized: null | string) => void;
+  /** Called on text input / color-picker commits — triggers an immediate history push. */
+  onHistoryPush?: () => void;
+  /** Called on each slider tick — triggers a debounced history push. */
+  onSliderChange?: () => void;
   showAlpha?: boolean;
   title: string;
 }
@@ -33,6 +37,8 @@ export function ColorPanel({
   id,
   onChange,
   onCommit,
+  onHistoryPush,
+  onSliderChange,
   showAlpha = false,
   title,
 }: ColorPanelProps) {
@@ -73,9 +79,10 @@ export function ColorPanel({
       setOutOfGamut(result.outOfGamut);
       const normalized = normalizeColorInput(val, finalColor);
       onCommit?.(normalized);
+      onHistoryPush?.();
       setRawInput(null);
     },
-    [showAlpha, onChange, onCommit],
+    [showAlpha, onChange, onCommit, onHistoryPush],
   );
 
   const applyAlpha = useCallback(
@@ -85,10 +92,11 @@ export function ColorPanel({
         onChange(color.alpha(Math.max(0, Math.min(1, v))));
         // Reset the display format so the hex (which encodes alpha) is shown
         onCommit?.(null);
+        onHistoryPush?.();
       }
       setRawAlpha(null);
     },
-    [color, onChange, onCommit],
+    [color, onChange, onCommit, onHistoryPush],
   );
 
   const lightness = color.lightness();
@@ -98,11 +106,12 @@ export function ColorPanel({
       try {
         onChange(color.lightness(value).alpha(color.alpha()));
         onCommit?.(null);
+        onSliderChange?.();
       } catch {
         // ignore invalid color states
       }
     },
-    [color, onChange, onCommit],
+    [color, onChange, onCommit, onSliderChange],
   );
 
   const gradient = lightnessGradientFromColor(color);
@@ -188,6 +197,7 @@ export function ColorPanel({
               const picked = Color(e.target.value);
               onChange(showAlpha ? picked.alpha(alpha) : picked);
               onCommit?.(null);
+              onHistoryPush?.();
             }}
             type="color"
             value={pickerHex}
