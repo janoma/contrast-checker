@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "i18n": "typesafe-i18n --no-watch && pnpm format",
+    "i18n": "typesafe-i18n --no-watch > /dev/null && pnpm format > /dev/null",
     "i18n:watch": "typesafe-i18n",
     "build": "tsc -b && vite build",
     "prebuild": "pnpm i18n",
