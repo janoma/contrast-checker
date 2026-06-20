@@ -73,7 +73,7 @@ export default function App() {
   }, [permalink]);
 
   return (
-    <div className="lg:max-w-[calc(var(--container-5xl)-4rem)] lg:mx-auto lg:border lg:rounded-lg p-3 sm:p-6 lg:my-8 bg-taupe-50 space-y-8">
+    <div className="lg:max-w-[calc(var(--container-5xl)-4rem)] lg:mx-auto lg:border lg:rounded-lg p-3 sm:p-6 lg:my-8 bg-taupe-50">
       <header>
         <h1>Contrast Checker</h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -82,108 +82,111 @@ export default function App() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-sm mx-auto sm:max-w-none">
-        <ColorPanel
-          color={fgColor}
-          displayValue={fgDisplay ?? undefined}
-          id="fg-color"
-          onChange={setFgColor}
-          onCommit={setFgDisplay}
-          showAlpha
-          title="Foreground"
-        />
-        <ColorPanel
-          color={bgColor}
-          displayValue={bgDisplay ?? undefined}
-          id="bg-color"
-          onChange={setBgColor}
-          onCommit={setBgDisplay}
-          title="Background"
-        />
-      </div>
-
-      <div className="flex flex-col items-stretch sm:items-center gap-2 max-w-sm mx-auto sm:max-w-none">
-        <div className="border rounded-xl px-12 py-5 text-center bg-background">
-          <h2>Contrast Ratio</h2>
-          <p className="text-6xl font-bold tracking-tight leading-none">
-            {contrastRatio.toFixed(2)}
-            <span className="font-normal text-muted-foreground">:1</span>
-          </p>
+      <main className="space-y-8 my-8" id="main-content">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-sm mx-auto sm:max-w-none">
+          <ColorPanel
+            color={fgColor}
+            displayValue={fgDisplay ?? undefined}
+            id="fg-color"
+            onChange={setFgColor}
+            onCommit={setFgDisplay}
+            showAlpha
+            title="Foreground"
+          />
+          <ColorPanel
+            color={bgColor}
+            displayValue={bgDisplay ?? undefined}
+            id="bg-color"
+            onChange={setBgColor}
+            onCommit={setBgDisplay}
+            title="Background"
+          />
         </div>
-        <button
-          className={cn(
-            "text-sm text-primary-foreground cursor-pointer bg-transparent p-0 inline-flex gap-1.5 items-center",
-            "border-b-2 border-double border-primary-foreground",
-            "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent place-self-center",
-          )}
-          onClick={copyPermalink}
-        >
-          {permalinkCopied ? (
-            <>
-              copied!
-              <Check className="text-success" size={12} />
-            </>
-          ) : (
-            <>
-              permalink
-              <Copy size={12} />
-            </>
-          )}
-        </button>
-      </div>
 
-      <PreviewSection
-        bgCss={bgCss}
-        fgCss={fgCss}
-        heading="Normal Text"
-        previewContent={
-          <p className="text-base leading-relaxed">{SAMPLE_TEXT}</p>
-        }
-        wcagRows={[
-          { label: "WCAG AA", pass: normalAA },
-          { label: "WCAG AAA", pass: normalAAA },
-        ]}
-      />
-
-      <PreviewSection
-        bgCss={bgCss}
-        fgCss={fgCss}
-        heading="Large Text"
-        previewContent={
-          <p className="text-2xl font-bold leading-snug">{SAMPLE_TEXT}</p>
-        }
-        wcagRows={[
-          { label: "WCAG AA", pass: largeAA },
-          { label: "WCAG AAA", pass: largeAAA },
-        ]}
-      />
-
-      <PreviewSection
-        bgCss={bgCss}
-        fgCss={fgCss}
-        heading="Graphical Objects and User Interface Components"
-        previewContent={
-          <div className="flex flex-col items-center gap-4">
-            <svg
-              aria-label="Star"
-              fill="currentColor"
-              height="36"
-              viewBox="0 0 24 24"
-              width="36"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
-            <input
-              className="rounded px-3 py-1.5 text-sm bg-background text-foreground"
-              defaultValue="Text Input"
-              style={{ border: `2px solid ${fgCss}` }}
-              type="text"
-            />
+        <div className="flex flex-col items-stretch sm:items-center gap-2 max-w-sm mx-auto sm:max-w-none">
+          <div className="border rounded-xl px-12 py-5 text-center bg-background">
+            <h2>Contrast Ratio</h2>
+            <p className="text-6xl font-bold tracking-tight leading-none">
+              {contrastRatio.toFixed(2)}
+              <span className="font-normal text-muted-foreground">:1</span>
+            </p>
           </div>
-        }
-        wcagRows={[{ label: "WCAG AA", pass: graphicsAA }]}
-      />
+          <button
+            className={cn(
+              "text-sm text-primary-foreground cursor-pointer bg-transparent p-0 inline-flex gap-1.5 items-center",
+              "border-b-2 border-double border-primary-foreground",
+              "hover:text-accent-foreground hover:border-accent-foreground hover:bg-accent place-self-center",
+            )}
+            onClick={copyPermalink}
+          >
+            {permalinkCopied ? (
+              <>
+                copied!
+                <Check className="text-success" size={12} />
+              </>
+            ) : (
+              <>
+                permalink
+                <Copy size={12} />
+              </>
+            )}
+          </button>
+        </div>
+
+        <PreviewSection
+          bgCss={bgCss}
+          fgCss={fgCss}
+          heading="Normal Text"
+          previewContent={
+            <p className="text-base leading-relaxed">{SAMPLE_TEXT}</p>
+          }
+          wcagRows={[
+            { label: "WCAG AA", pass: normalAA },
+            { label: "WCAG AAA", pass: normalAAA },
+          ]}
+        />
+
+        <PreviewSection
+          bgCss={bgCss}
+          fgCss={fgCss}
+          heading="Large Text"
+          previewContent={
+            <p className="text-2xl font-bold leading-snug">{SAMPLE_TEXT}</p>
+          }
+          wcagRows={[
+            { label: "WCAG AA", pass: largeAA },
+            { label: "WCAG AAA", pass: largeAAA },
+          ]}
+        />
+
+        <PreviewSection
+          bgCss={bgCss}
+          fgCss={fgCss}
+          heading="Graphical Objects and User Interface Components"
+          previewContent={
+            <div className="flex flex-col items-center gap-4">
+              <svg
+                aria-label="Star"
+                fill="currentColor"
+                height="36"
+                viewBox="0 0 24 24"
+                width="36"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              <input
+                aria-label="Text Input"
+                className="rounded px-3 py-1.5 text-sm bg-background text-foreground"
+                defaultValue="Text Input"
+                style={{ border: `2px solid ${fgCss}` }}
+                type="text"
+              />
+            </div>
+          }
+          wcagRows={[{ label: "WCAG AA", pass: graphicsAA }]}
+        />
+      </main>
 
       <footer className="text-sm text-muted-foreground bg-muted border rounded-lg p-4 mt-16">
         <p>

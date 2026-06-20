@@ -42,7 +42,7 @@
   --input: var(--color-taupe-200);
   --ring: oklch(80.9% 0.105 251.813); /* blue-300 */
   --radius: 0.625rem;
-  --success: oklch(62.7% 0.194 149.214); /* green-600 */
+  --success: oklch(44.8% 0.119 151.328); /* green-800 */
   --warning: var(--color-yellow-50);
   --warning-foreground: var(--color-yellow-800);
 }

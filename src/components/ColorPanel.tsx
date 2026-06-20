@@ -153,11 +153,10 @@ export function ColorPanel({
 
       <div className="flex gap-3 items-end">
         <div className="flex-1">
-          <p className="text-sm text-muted-foreground text-center mb-1">
-            Color Picker
-          </p>
+          <label htmlFor={`${id}-color-picker`}>Color Picker</label>
           <input
             className="w-full h-10 cursor-pointer rounded border p-0.5"
+            id={`${id}-color-picker`}
             onChange={(e) => {
               const picked = Color(e.target.value);
               onChange(showAlpha ? picked.alpha(alpha) : picked);
@@ -169,11 +168,10 @@ export function ColorPanel({
         </div>
         {showAlpha && (
           <div className="w-16">
-            <p className="text-sm text-muted-foreground text-center mb-1">
-              Alpha
-            </p>
+            <label htmlFor={`${id}-alpha`}>Alpha</label>
             <input
               className="w-full h-10 border rounded px-2 py-1.5 text-sm text-center"
+              id={`${id}-alpha`}
               onBlur={() => {
                 applyAlpha(displayAlpha);
               }}
@@ -190,9 +188,7 @@ export function ColorPanel({
       </div>
 
       <div>
-        <p className="text-sm text-muted-foreground text-center mb-2">
-          Lightness
-        </p>
+        <label htmlFor={`${id}-lightness`}>Lightness</label>
         <div className="relative">
           <div
             aria-hidden
@@ -204,6 +200,7 @@ export function ColorPanel({
             />
           </div>
           <Slider
+            id={`${id}-lightness`}
             max={100}
             min={0}
             onValueChange={(value) => {
